@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Team Day</title>
+<meta name="description" content="Team Day — October 1, 2026" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf9f6;
+    --panel: #ffffff;
+    --panel-alt: #f2f0ea;
+    --ink: #16161d;
+    --muted: #6b6f80;
+    --accent: #5b5bf0;   /* swap for your brand color */
+    --accent-2: #ff8a65;
+    --accent-3: #2bd4a8;
+    --clay: #b5623f;
+    --accent-ink: #ffffff;
+    --line: #e8e5dc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d0d12; --panel: #16161f; --panel-alt: #1c1c28; --ink: #f4f3f9; --muted: #9497ab;
+      --accent: #8b8bff; --accent-2: #ff9d7a; --accent-3: #4be3bd; --clay: #d98462; --accent-ink: #0d0d12; --line: #2a2a38;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 400 16px/1.6 "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    overflow-x: hidden;
+  }
+  a { color: var(--accent); }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  /* ---------- cursor glow ---------- */
+  #glow {
+    position: fixed; inset: 0; pointer-events: none; z-index: 2; opacity: 0;
+    background: radial-gradient(280px circle at var(--gx,50%) var(--gy,50%), color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%);
+    transition: opacity .3s ease;
+  }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 40px 20px; }
+  .blobs { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .35; }
+  .blob.b1 { width: 420px; height: 420px; background: var(--accent); top: -160px; left: -120px; animation: float1 20s ease-in-out infinite; }
+  .blob.b2 { width: 360px; height: 360px; background: var(--accent-2); bottom: -160px; right: -100px; animation: float2 24s ease-in-out infinite; }
+  .blob.b3 { width: 260px; height: 260px; background: var(--accent-3); top: 50%; right: 12%; opacity: .25; animation: float3 28s ease-in-out infinite; }
+  @keyframes float1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(60px,70px) scale(1.1); } }
+  @keyframes float2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-55px,-40px) scale(1.05); } }
+  @keyframes float3 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-40px,50px); } }
+  @media (prefers-reduced-motion: reduce) { .blob, .wheel, html { animation: none !important; scroll-behavior: auto !important; } }
+
+  .wheel { position: absolute; z-index: 0; width: 380px; height: 380px; right: -70px; bottom: -70px; color: var(--clay); animation: wheelturn 40s linear infinite; }
+  @keyframes wheelturn { to { transform: rotate(360deg); } }
+  @media (max-width: 700px) { .wheel { width: 260px; height: 260px; right: -60px; bottom: -40px; } }
+
+  .hero-inner { position: relative; z-index: 1; text-align: center; max-width: 760px; }
+  .eyebrow { text-transform: uppercase; letter-spacing: .18em; font-size: 13px; font-weight: 700; color: var(--accent); margin: 0 0 18px; }
+  .hero-title {
+    font-size: clamp(48px, 11vw, 108px); font-weight: 800; line-height: .95; margin: 0 0 18px; letter-spacing: -0.03em;
+    background: linear-gradient(120deg, var(--ink) 30%, var(--accent) 60%, var(--accent-2) 90%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    background-size: 200% auto; animation: shine 8s linear infinite;
+  }
+  @keyframes shine { to { background-position: 200% center; } }
+  .tagline { font-size: clamp(16px, 2.4vw, 21px); color: var(--muted); margin: 0 0 40px; font-weight: 500; }
+
+  .countdown { display: flex; gap: clamp(10px,3vw,22px); justify-content: center; margin-bottom: 44px; flex-wrap: wrap; }
+  .countdown .unit { min-width: 76px; }
+  .countdown .num { font-size: clamp(28px, 5vw, 44px); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+  .countdown .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-top: 6px; display: block; }
+
+  .scroll-cue { font-size: 13px; color: var(--muted); letter-spacing: .08em; animation: bob 2s ease-in-out infinite; }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+  /* ---------- panels ---------- */
+  .panel { padding: clamp(60px, 10vw, 110px) 20px; }
+  .panel.alt { background: var(--panel-alt); }
+  .panel-inner { max-width: 720px; margin: 0 auto; }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+  h2.section-title { font-size: clamp(26px,4vw,36px); font-weight: 800; letter-spacing: -0.01em; margin: 0 0 8px; }
+  .section-sub { color: var(--muted); margin: 0 0 40px; font-size: 16px; }
+
+  .facts { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 18px; }
+  .facts li { border-left: 3px solid var(--accent); padding-left: 14px; }
+  .facts .k { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 4px; }
+  .facts .v { font-weight: 700; font-size: 16px; }
+  .desc { color: var(--muted); font-size: 17px; margin: 0; }
+
+  /* agenda cards */
+  .agenda { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .a-card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 22px;
+    cursor: pointer; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .a-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -24px rgba(20,20,40,.35); border-color: var(--accent); }
+  .a-card .a-top { display: flex; align-items: center; gap: 12px; }
+  .a-card .a-icon { font-size: 26px; display: inline-block; }
+  .a-card.pottery:hover .a-icon { animation: iconspin .6s ease; }
+  @keyframes iconspin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+  .a-card .time { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); display: block; }
+  .a-card .a-title { font-weight: 700; font-size: 17px; }
+  .a-card .a-detail { max-height: 0; overflow: hidden; transition: max-height .35s ease, margin-top .35s ease; margin-top: 0; }
+  .a-card.open .a-detail { max-height: 220px; margin-top: 12px; }
+  .a-card .place { color: var(--muted); font-size: 14px; display: block; margin-bottom: 6px; }
+  .a-card .maplink { font-size: 12px; font-weight: 700; color: var(--accent); text-decoration: none; }
+  .a-card .maplink:hover { text-decoration: underline; }
+  .a-card .a-note { display: block; margin-top: 10px; font-size: 13px; color: var(--clay); background: color-mix(in srgb, var(--clay) 12%, transparent); border-radius: 10px; padding: 8px 10px; }
+  .a-card .hint { font-size: 12px; color: var(--muted); opacity: .7; margin-top: 10px; }
+
+  /* photos */
+  .photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; }
+  .photo-tile { aspect-ratio: 1; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 30px; background: var(--panel-alt); transition: transform .2s ease; }
+  .photo-tile:hover { transform: scale(1.04) rotate(-1deg); }
+  .photo-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* buttons */
+  .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
+  .btn {
+    appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+    padding: 14px 22px; border-radius: 999px; font: inherit; font-weight: 700; font-size: 15px; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    transition: transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease, border-color .2s ease;
+  }
+  .btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 14px 30px -16px rgba(20,20,40,.4); border-color: var(--accent); }
+  .btn:active { transform: translateY(0) scale(.98); }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .btn.ghost { background: transparent; }
+
+  .rsvp-box { margin-top: 50px; padding: 30px; border-radius: 20px; background: var(--panel); border: 1px solid var(--line); text-align: center; }
+  .rsvp-box h2 { font-size: 20px; margin: 0 0 8px; }
+  .rsvp-box p { color: var(--muted); margin: 0 0 20px; font-size: 15px; }
+
+  footer { text-align: center; padding: 50px 20px 70px; color: var(--muted); font-size: 13px; }
+
+  #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+</style>
+</head>
+<body>
+<div id="glow"></div>
+<canvas id="confetti-canvas"></canvas>
+
+<header class="hero" id="hero">
+  <div class="blobs" aria-hidden="true">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  </div>
+  <div class="wheel" aria-hidden="true">
+    <svg viewBox="0 0 200 200" width="100%" height="100%">
+      <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/>
+      <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".45"/>
+      <circle cx="100" cy="100" r="45" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".35"/>
+      <circle cx="100" cy="100" r="6" fill="currentColor"/>
+      <g opacity=".35"><line x1="100" y1="5" x2="100" y2="195" stroke="currentColor"/><line x1="5" y1="100" x2="195" y2="100" stroke="currentColor"/></g>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <p class="eyebrow" id="eyebrow">Team event</p>
+    <h1 class="hero-title" id="title">Team Day</h1>
+    <p class="tagline" id="tagline">A full day together, in person.</p>
+    <div class="countdown" id="countdown" aria-live="polite"></div>
+    <div class="scroll-cue">↓ scroll for the plan</div>
+  </div>
+</header>
+
+<main>
+  <section class="panel reveal">
+    <div class="panel-inner">
+      <h2 class="section-title">What's happening</h2>
+      <p class="desc" id="desc"></p>
+      <ul class="facts" id="facts"></ul>
+    </div>
+  </section>
+
+  <section class="panel alt reveal">
+    <div class="panel-inner">
+      <h2 class="section-title">The day</h2>
+      <p class="section-sub">Tap a stop for details.</p>
+      <div class="agenda" id="agenda"></div>
+    </div>
+  </section>
+
+  <section class="panel reveal">
+    <div class="panel-inner">
+      <h2 class="section-title">Snapshots</h2>
+      <p class="section-sub">More to come.</p>
+      <div class="photos" id="photos"></div>
+    </div>
+  </section>
+
+  <section class="panel alt reveal">
+    <div class="panel-inner">
+      <h2 class="section-title">Save the date</h2>
+      <p class="section-sub">Get it on your calendar now — thank yourself later.</p>
+      <div class="actions">
+        <button class="btn primary" id="ics">⬇️ Add to calendar</button>
+        <a class="btn ghost" id="gcal" target="_blank" rel="noopener">Google Calendar</a>
+        <a class="btn ghost" id="outlook" target="_blank" rel="noopener">Outlook</a>
+      </div>
+
+      <div class="rsvp-box">
+        <h2>🎉 Can you make it?</h2>
+        <p id="rsvp-text"></p>
+        <div class="actions" style="justify-content:center;margin-top:0;">
+          <a class="btn primary" id="rsvp-btn" href="#" target="_blank" rel="noopener">Open Slack</a>
+          <button class="btn ghost" id="hype">I'm in! 🎊</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="footer">Questions? Reach out to the host.</footer>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   EDIT ONLY THIS BLOCK. Everything on the page is built from it.
+   Dates use 24h local time in the format: "YYYY-MM-DD HH:MM"
+   ───────────────────────────────────────────────────────────── */
+const CONFIG = {
+  eyebrow:  "Inverse Studio · Team Day",
+  title:    "Team Day",
+  tagline:  "Breakfast, a walk, hands in clay, and dinner — a full day together in person.",
+
+  start:    "2026-10-01 10:00",
+  end:      "2026-10-01 23:00", // "open end" dinner capped here for calendar purposes
+
+  host:     "Anna",
+  rsvpDeadline: "Friday, September 25",
+
+  description:
+    "A full day to slow down and be a team again. Since we're remote-first, this is our " +
+    "chance to actually be in the same room: breakfast together, a relaxed walk (or tram) " +
+    "to a pottery studio, hands-on making, a breather back at the office with some vibe " +
+    "coding and design/coding games, and dinner that runs as long as we want. Mostly: " +
+    "sharing laughs and enjoying each other's company.",
+
+  // "map" is a best-guess search query (venue name only). Add a city/address for a
+  // more reliable pin, e.g. "Auszeit, Vienna, Austria".
+  agenda: [
+    { icon: "🥐", time: "10:00 – 11:00",    title: "Breakfast",          place: "Auszeit",                 map: "Auszeit" },
+    { icon: "🚶", time: "11:00 – 11:45",    title: "Walk (or tram) over", place: "Auszeit → Palavara Studio — 30 min walk or 24 min public transit", map: "Palavara Studio" },
+    { icon: "🏺", time: "12:00 – 14:30",    title: "Pottery workshop",    place: "Palavara Pottery Studio", map: "Palavara Pottery Studio",
+      note: "Clay gets messy — wear clothes you don't mind ruining (or bring a change), and leave jewelry/rings somewhere safe." },
+    { icon: "💻", time: "14:30 – 17:30",    title: "Break / activities",  place: "Office",                  map: "" },
+    { icon: "🍝", time: "17:30 – open end", title: "Dinner",              place: "Candyman",                map: "Candyman" },
+  ],
+
+  // Drop real image files into photos/ and list them here, e.g.
+  // { src: "photos/breakfast.jpg", alt: "Breakfast at Auszeit" }
+  photos: [],
+
+  // RSVP happens in Slack. Fill in slackUrl to show an "Open Slack" button.
+  slackChannel: "#team-day",
+  slackUrl: "",
+
+  footer: "Questions? Email anna@inversestudio.io.",
+};
+/* ───────────────────────────────────────────────────────────── */
+
+function toDate(s) {
+  const [d, t] = s.split(" ");
+  const [Y, M, D] = d.split("-").map(Number);
+  const [h, m] = t.split(":").map(Number);
+  return new Date(Y, M - 1, D, h, m);
+}
+function z(n) { return String(n).padStart(2, "0"); }
+function icsStamp(dt) { return `${dt.getFullYear()}${z(dt.getMonth()+1)}${z(dt.getDate())}T${z(dt.getHours())}${z(dt.getMinutes())}00`; }
+function icsUTC(dt) { return `${dt.getUTCFullYear()}${z(dt.getUTCMonth()+1)}${z(dt.getUTCDate())}T${z(dt.getUTCHours())}${z(dt.getUTCMinutes())}${z(dt.getUTCSeconds())}Z`; }
+function icsEscape(s) { return String(s).replace(/\\/g, "\\\\").replace(/,/g, "\\,").replace(/;/g, "\\;").replace(/\n/g, "\\n"); }
+function mapsHref(q) { return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q); }
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const start = toDate(CONFIG.start);
+const end = toDate(CONFIG.end);
+
+document.getElementById("eyebrow").textContent = CONFIG.eyebrow;
+document.getElementById("title").textContent = CONFIG.title;
+document.title = CONFIG.title;
+document.getElementById("tagline").textContent = CONFIG.tagline;
+document.getElementById("desc").textContent = CONFIG.description;
+document.getElementById("footer").textContent = CONFIG.footer;
+
+const dateStr = start.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+const facts = [
+  { k: "Date", v: dateStr },
+  { k: "Starts", v: start.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) },
+  { k: "RSVP by", v: CONFIG.rsvpDeadline },
+];
+document.getElementById("facts").innerHTML = facts.map(f => `<li><span class="k">${f.k}</span><span class="v">${f.v}</span></li>`).join("");
+
+document.getElementById("agenda").innerHTML = CONFIG.agenda.map((item, i) => `
+  <div class="a-card${item.icon === "🏺" ? " pottery" : ""}" data-i="${i}">
+    <div class="a-top">
+      <span class="a-icon">${item.icon || "•"}</span>
+      <div>
+        <span class="time">${item.time}</span>
+        <span class="a-title">${item.title}</span>
+      </div>
+    </div>
+    <div class="a-detail">
+      <span class="place">${item.place}</span>
+      ${item.map ? `<a class="maplink" href="${mapsHref(item.map)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Open in Maps ↗</a>` : ""}
+      ${item.note ? `<span class="a-note">${item.note}</span>` : ""}
+    </div>
+    <div class="hint">tap for details</div>
+  </div>`
+).join("");
+document.querySelectorAll(".a-card").forEach(card => card.addEventListener("click", () => card.classList.toggle("open")));
+
+const photosEl = document.getElementById("photos");
+if (CONFIG.photos && CONFIG.photos.length) {
+  photosEl.innerHTML = CONFIG.photos.map(p => `<div class="photo-tile"><img src="${p.src}" alt="${p.alt || ""}"></div>`).join("");
+} else {
+  photosEl.innerHTML = ["🥐","🏺","🍽️"].map(e => `<div class="photo-tile" style="color:var(--accent)">${e}</div>`).join("");
+}
+
+document.getElementById("rsvp-text").textContent = `Reply in ${CONFIG.slackChannel} on Slack by ${CONFIG.rsvpDeadline}.`;
+const rsvpBtn = document.getElementById("rsvp-btn");
+if (CONFIG.slackUrl) { rsvpBtn.href = CONFIG.slackUrl; } else { rsvpBtn.style.display = "none"; }
+
+/* ---------- countdown ---------- */
+const countdownEl = document.getElementById("countdown");
+function renderCountdown() {
+  const diff = start - new Date();
+  if (diff <= 0) {
+    countdownEl.innerHTML = `<div class="unit"><span class="num">🎉</span><span class="lbl">It's happening</span></div>`;
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor(diff / 3600000) % 24;
+  const m = Math.floor(diff / 60000) % 60;
+  const s = Math.floor(diff / 1000) % 60;
+  const units = [["Days", d], ["Hrs", h], ["Min", m], ["Sec", s]];
+  countdownEl.innerHTML = units.map(([lbl, v]) => `<div class="unit"><span class="num">${z(v)}</span><span class="lbl">${lbl}</span></div>`).join("");
+}
+renderCountdown();
+setInterval(renderCountdown, 1000);
+
+/* ---------- scroll reveal ---------- */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("in-view"); });
+}, { threshold: 0.15 });
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+/* ---------- cursor glow (desktop only) ---------- */
+if (window.matchMedia("(pointer: fine)").matches && !reduceMotion) {
+  const glow = document.getElementById("glow");
+  window.addEventListener("mousemove", (e) => {
+    glow.style.setProperty("--gx", e.clientX + "px");
+    glow.style.setProperty("--gy", e.clientY + "px");
+    glow.style.opacity = "1";
+  });
+  window.addEventListener("mouseleave", () => { glow.style.opacity = "0"; });
+}
+
+/* ---------- confetti ---------- */
+const canvas = document.getElementById("confetti-canvas");
+const ctx = canvas.getContext("2d");
+function resizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight; }
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+function burstConfetti() {
+  if (reduceMotion) return;
+  const colors = ["#5b5bf0", "#ff8a65", "#2bd4a8", "#ffd166"];
+  const N = 90;
+  const particles = Array.from({ length: N }, () => ({
+    x: canvas.width / 2, y: canvas.height / 2,
+    vx: (Math.random() - 0.5) * 14, vy: (Math.random() - 1.4) * 14,
+    size: 5 + Math.random() * 5, color: colors[Math.floor(Math.random() * colors.length)],
+    rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3, life: 1,
+  }));
+  let frame = 0;
+  function tick() {
+    frame++;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.vy += 0.35; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life -= 0.012;
+      ctx.save();
+      ctx.globalAlpha = Math.max(p.life, 0);
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      ctx.restore();
+    });
+    if (frame < 140) requestAnimationFrame(tick); else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  tick();
+}
+document.getElementById("ics").addEventListener("click", () => {
+  burstConfetti();
+  const fullDesc = CONFIG.description + "\n\n" + CONFIG.agenda.map(a => `${a.time} — ${a.title} (${a.place})`).join("\n");
+  const text = [
+    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//claude-projects//team-event//EN",
+    "CALSCALE:GREGORIAN", "METHOD:PUBLISH", "BEGIN:VEVENT",
+    `UID:${icsStamp(start)}-team-day@local`,
+    `DTSTAMP:${icsUTC(new Date())}`,
+    `DTSTART:${icsUTC(start)}`,
+    `DTEND:${icsUTC(end)}`,
+    `SUMMARY:${icsEscape(CONFIG.title)}`,
+    `DESCRIPTION:${icsEscape(fullDesc)}`,
+    "END:VEVENT", "END:VCALENDAR",
+  ].join("\r\n");
+  const blob = new Blob([text], { type: "text/calendar;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "team-day.ics";
+  document.body.appendChild(a); a.click(); a.remove();
+});
+document.getElementById("hype").addEventListener("click", (e) => {
+  burstConfetti();
+  e.target.textContent = "Woo! Don't forget Slack 👀";
+  setTimeout(() => { e.target.textContent = "I'm in! 🎊"; }, 2200);
+});
+if (rsvpBtn.style.display !== "none") rsvpBtn.addEventListener("click", burstConfetti);
+
+/* Google Calendar link */
+const g = new URL("https://calendar.google.com/calendar/render");
+g.searchParams.set("action", "TEMPLATE");
+g.searchParams.set("text", CONFIG.title);
+g.searchParams.set("dates", `${icsStamp(start)}/${icsStamp(end)}`);
+g.searchParams.set("details", CONFIG.description + "\n\n" + CONFIG.agenda.map(a => `${a.time} — ${a.title} (${a.place})`).join("\n"));
+document.getElementById("gcal").href = g.toString();
+
+/* Outlook web link */
+const o = new URL("https://outlook.office.com/calendar/0/deeplink/compose");
+o.searchParams.set("path", "/calendar/action/compose");
+o.searchParams.set("rru", "addevent");
+o.searchParams.set("subject", CONFIG.title);
+o.searchParams.set("startdt", start.toISOString());
+o.searchParams.set("enddt", end.toISOString());
+o.searchParams.set("body", CONFIG.description);
+document.getElementById("outlook").href = o.toString();
+</script>
+</body>
+</html>
