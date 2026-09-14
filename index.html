@@ -10,22 +10,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #faf9f6;
-    --panel: #ffffff;
-    --panel-alt: #f2f0ea;
-    --ink: #16161d;
-    --muted: #6b6f80;
-    --accent: #5b5bf0;   /* swap for your brand color */
-    --accent-2: #ff8a65;
-    --accent-3: #2bd4a8;
-    --clay: #b5623f;
-    --accent-ink: #ffffff;
-    --line: #e8e5dc;
+    --bg: #f5ede0;
+    --panel: #fffaf3;
+    --panel-alt: #ece0cd;
+    --ink: #241f18;
+    --muted: #8c8072;
+    --clay: #a8674a;         /* warm neutral clay, used for icons/details — not the "pop" */
+    --accent: #7eaaff;       /* Inverse Studio's real accent — the one splash of color */
+    --accent-ink: #0b0d14;
+    --line: #e2d4bf;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #0d0d12; --panel: #16161f; --panel-alt: #1c1c28; --ink: #f4f3f9; --muted: #9497ab;
-      --accent: #8b8bff; --accent-2: #ff9d7a; --accent-3: #4be3bd; --clay: #d98462; --accent-ink: #0d0d12; --line: #2a2a38;
+      --bg: #1a160f; --panel: #221b13; --panel-alt: #2a2118; --ink: #f2e8d8; --muted: #ab9d89;
+      --clay: #c98865; --accent: #7eaaff; --accent-ink: #0b0d14; --line: #392f20;
     }
   }
   * { box-sizing: border-box; }
@@ -38,52 +36,64 @@
   a { color: var(--accent); }
   ::selection { background: var(--accent); color: var(--accent-ink); }
 
-  /* ---------- cursor glow ---------- */
   #glow {
     position: fixed; inset: 0; pointer-events: none; z-index: 2; opacity: 0;
-    background: radial-gradient(280px circle at var(--gx,50%) var(--gy,50%), color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%);
+    background: radial-gradient(280px circle at var(--gx,50%) var(--gy,50%), color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%);
     transition: opacity .3s ease;
   }
 
   /* ---------- hero ---------- */
   .hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 40px 20px; }
-  .blobs { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-  .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .35; }
-  .blob.b1 { width: 420px; height: 420px; background: var(--accent); top: -160px; left: -120px; animation: float1 20s ease-in-out infinite; }
-  .blob.b2 { width: 360px; height: 360px; background: var(--accent-2); bottom: -160px; right: -100px; animation: float2 24s ease-in-out infinite; }
-  .blob.b3 { width: 260px; height: 260px; background: var(--accent-3); top: 50%; right: 12%; opacity: .25; animation: float3 28s ease-in-out infinite; }
-  @keyframes float1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(60px,70px) scale(1.1); } }
-  @keyframes float2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-55px,-40px) scale(1.05); } }
-  @keyframes float3 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-40px,50px); } }
-  @media (prefers-reduced-motion: reduce) { .blob, .wheel, html { animation: none !important; scroll-behavior: auto !important; } }
+  .blobs, .mugs { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .parallax { position: absolute; inset: 0; transition: transform .25s ease-out; }
+  .blob { position: absolute; filter: blur(80px); opacity: .35; }
+  .blob.b1 { width: 420px; height: 420px; background: var(--clay); top: -160px; left: -120px; opacity: .28; border-radius: 62% 38% 55% 45% / 45% 60% 40% 55%; animation: float1 24s ease-in-out infinite; }
+  .blob.b2 { width: 340px; height: 340px; background: var(--accent); bottom: -150px; right: -100px; opacity: .18; border-radius: 40% 60% 45% 55% / 55% 40% 60% 45%; animation: float2 28s ease-in-out infinite; }
+  .blob.b3 { width: 260px; height: 260px; background: var(--line); top: 46%; right: 10%; opacity: .5; border-radius: 55% 45% 40% 60% / 40% 55% 45% 60%; animation: float3 32s ease-in-out infinite; }
+  @keyframes float1 { 0%,100% { transform: translate(0,0) scale(1) rotate(0); } 50% { transform: translate(50px,60px) scale(1.08) rotate(20deg); } }
+  @keyframes float2 { 0%,100% { transform: translate(0,0) scale(1) rotate(0); } 50% { transform: translate(-45px,-35px) scale(1.05) rotate(-15deg); } }
+  @keyframes float3 { 0%,100% { transform: translate(0,0) rotate(0); } 50% { transform: translate(-35px,45px) rotate(12deg); } }
+  @media (prefers-reduced-motion: reduce) { .blob, .mug, html { animation: none !important; scroll-behavior: auto !important; } .parallax { transition: none; } }
 
-  .wheel { position: absolute; z-index: 0; width: 380px; height: 380px; right: -70px; bottom: -70px; color: var(--clay); animation: wheelturn 40s linear infinite; }
-  @keyframes wheelturn { to { transform: rotate(360deg); } }
-  @media (max-width: 700px) { .wheel { width: 260px; height: 260px; right: -60px; bottom: -40px; } }
+  .mug { position: absolute; }
+  .mug svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .mug .cup-handle { fill: none; stroke: currentColor; stroke-width: 4; opacity: .7; }
+  .mug.m1 { width: 150px; height: 165px; color: var(--clay); right: 6%; bottom: 8%; opacity: .55; animation: mug1 15s ease-in-out infinite; }
+  .mug.m2 { width: 96px; height: 106px; color: var(--clay); right: 24%; bottom: 32%; opacity: .4; animation: mug2 19s ease-in-out infinite; }
+  .mug.m3 { width: 68px; height: 75px; color: var(--accent); right: 2%; bottom: 40%; opacity: .6; animation: mug3 17s ease-in-out infinite; }
+  @keyframes mug1 { 0%,100% { transform: translate(0,0) rotate(-4deg); } 50% { transform: translate(-16px,-18px) rotate(5deg); } }
+  @keyframes mug2 { 0%,100% { transform: translate(0,0) rotate(6deg); } 50% { transform: translate(12px,-16px) rotate(-6deg); } }
+  @keyframes mug3 { 0%,100% { transform: translate(0,0) rotate(-8deg); } 50% { transform: translate(-10px,14px) rotate(8deg); } }
 
   .hero-inner { position: relative; z-index: 1; text-align: center; max-width: 760px; }
   .eyebrow { text-transform: uppercase; letter-spacing: .18em; font-size: 13px; font-weight: 700; color: var(--accent); margin: 0 0 18px; }
   .hero-title {
     font-size: clamp(48px, 11vw, 108px); font-weight: 800; line-height: .95; margin: 0 0 18px; letter-spacing: -0.03em;
-    background: linear-gradient(120deg, var(--ink) 30%, var(--accent) 60%, var(--accent-2) 90%);
+    background: linear-gradient(120deg, var(--ink) 35%, var(--clay) 65%, var(--accent) 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
-    background-size: 200% auto; animation: shine 8s linear infinite;
+    background-size: 250% auto; animation: shine 18s linear infinite;
   }
-  @keyframes shine { to { background-position: 200% center; } }
+  @keyframes shine { to { background-position: 250% center; } }
   .tagline { font-size: clamp(16px, 2.4vw, 21px); color: var(--muted); margin: 0 0 40px; font-weight: 500; }
 
-  .countdown { display: flex; gap: clamp(10px,3vw,22px); justify-content: center; margin-bottom: 44px; flex-wrap: wrap; }
-  .countdown .unit { min-width: 76px; }
-  .countdown .num { font-size: clamp(28px, 5vw, 44px); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
-  .countdown .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-top: 6px; display: block; }
+  .countdown-ring { position: relative; width: clamp(150px, 34vw, 190px); height: clamp(150px, 34vw, 190px); margin: 0 auto 44px; }
+  .countdown-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .countdown-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .cd-days { font-size: clamp(32px, 7vw, 44px); font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .cd-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-top: 4px; }
+  .cd-time { font-size: 13px; color: var(--muted); margin-top: 8px; font-variant-numeric: tabular-nums; letter-spacing: .03em; }
 
   .scroll-cue { font-size: 13px; color: var(--muted); letter-spacing: .08em; animation: bob 2s ease-in-out infinite; }
   @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 
   /* ---------- panels ---------- */
-  .panel { padding: clamp(60px, 10vw, 110px) 20px; }
+  .panel { padding: clamp(60px, 10vw, 110px) 20px; position: relative; overflow: hidden; }
   .panel.alt { background: var(--panel-alt); }
-  .panel-inner { max-width: 720px; margin: 0 auto; }
+  .panel.alt::before {
+    content: ""; position: absolute; width: 480px; height: 480px; top: -220px; left: -160px;
+    background: radial-gradient(circle, var(--clay) 0%, transparent 70%); opacity: .1; border-radius: 50%; pointer-events: none;
+  }
+  .panel-inner { position: relative; max-width: 720px; margin: 0 auto; }
   .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
   .reveal.in-view { opacity: 1; transform: translateY(0); }
 
@@ -99,30 +109,29 @@
   /* agenda cards */
   .agenda { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
   .a-card {
+    position: relative; overflow: hidden;
     background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 22px;
     cursor: pointer; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
     -webkit-tap-highlight-color: transparent;
   }
-  .a-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -24px rgba(20,20,40,.35); border-color: var(--accent); }
-  .a-card .a-top { display: flex; align-items: center; gap: 12px; }
-  .a-card .a-icon { font-size: 26px; display: inline-block; }
+  .a-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -24px rgba(60,40,20,.3); border-color: var(--accent); }
+  .a-card .a-bg-icon { position: absolute; right: -18px; bottom: -18px; width: 110px; height: 110px; color: var(--clay); opacity: .09; pointer-events: none; transition: transform .3s ease, opacity .3s ease; }
+  .a-card .a-bg-icon svg { width: 100%; height: 100%; }
+  .a-card:hover .a-bg-icon { opacity: .16; transform: scale(1.08) rotate(-4deg); }
+  .a-card .a-top { position: relative; display: flex; align-items: center; gap: 12px; }
+  .a-card .a-icon { width: 28px; height: 28px; color: var(--clay); flex: none; display: inline-flex; }
+  .a-card .a-icon svg { width: 100%; height: 100%; }
   .a-card.pottery:hover .a-icon { animation: iconspin .6s ease; }
   @keyframes iconspin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
   .a-card .time { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); display: block; }
   .a-card .a-title { font-weight: 700; font-size: 17px; }
-  .a-card .a-detail { max-height: 0; overflow: hidden; transition: max-height .35s ease, margin-top .35s ease; margin-top: 0; }
+  .a-card .a-detail { position: relative; max-height: 0; overflow: hidden; transition: max-height .35s ease, margin-top .35s ease; margin-top: 0; }
   .a-card.open .a-detail { max-height: 220px; margin-top: 12px; }
   .a-card .place { color: var(--muted); font-size: 14px; display: block; margin-bottom: 6px; }
   .a-card .maplink { font-size: 12px; font-weight: 700; color: var(--accent); text-decoration: none; }
   .a-card .maplink:hover { text-decoration: underline; }
-  .a-card .a-note { display: block; margin-top: 10px; font-size: 13px; color: var(--clay); background: color-mix(in srgb, var(--clay) 12%, transparent); border-radius: 10px; padding: 8px 10px; }
-  .a-card .hint { font-size: 12px; color: var(--muted); opacity: .7; margin-top: 10px; }
-
-  /* photos */
-  .photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; }
-  .photo-tile { aspect-ratio: 1; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 30px; background: var(--panel-alt); transition: transform .2s ease; }
-  .photo-tile:hover { transform: scale(1.04) rotate(-1deg); }
-  .photo-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .a-card .a-note { display: block; margin-top: 10px; font-size: 13px; color: var(--clay); background: color-mix(in srgb, var(--clay) 14%, transparent); border-radius: 10px; padding: 8px 10px; }
+  .a-card .hint { position: relative; font-size: 12px; color: var(--muted); opacity: .65; margin-top: 10px; }
 
   /* buttons */
   .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
@@ -132,7 +141,7 @@
     text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
     transition: transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease, border-color .2s ease;
   }
-  .btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 14px 30px -16px rgba(20,20,40,.4); border-color: var(--accent); }
+  .btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 14px 30px -16px rgba(60,40,20,.35); border-color: var(--accent); }
   .btn:active { transform: translateY(0) scale(.98); }
   .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
   .btn.ghost { background: transparent; }
@@ -144,30 +153,84 @@
   footer { text-align: center; padding: 50px 20px 70px; color: var(--muted); font-size: 13px; }
 
   #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+
+  .paper-grain {
+    position: fixed; inset: 0; z-index: 40; pointer-events: none; opacity: .05; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 140px 140px;
+  }
+  @media (prefers-color-scheme: dark) { .paper-grain { opacity: .08; mix-blend-mode: overlay; } }
 </style>
 </head>
 <body>
+<div class="paper-grain"></div>
 <div id="glow"></div>
 <canvas id="confetti-canvas"></canvas>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="clayGrain" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="noise"/>
+      <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0" result="grain"/>
+      <feComposite in="grain" in2="SourceGraphic" operator="in" result="grainClip"/>
+      <feBlend in="SourceGraphic" in2="grainClip" mode="multiply"/>
+    </filter>
+  </defs>
+</svg>
 
 <header class="hero" id="hero">
-  <div class="blobs" aria-hidden="true">
-    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="blobs">
+    <div class="parallax" data-depth="16"><div class="blob b1"></div></div>
+    <div class="parallax" data-depth="10"><div class="blob b2"></div></div>
+    <div class="parallax" data-depth="22"><div class="blob b3"></div></div>
   </div>
-  <div class="wheel" aria-hidden="true">
-    <svg viewBox="0 0 200 200" width="100%" height="100%">
-      <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/>
-      <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".45"/>
-      <circle cx="100" cy="100" r="45" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".35"/>
-      <circle cx="100" cy="100" r="6" fill="currentColor"/>
-      <g opacity=".35"><line x1="100" y1="5" x2="100" y2="195" stroke="currentColor"/><line x1="5" y1="100" x2="195" y2="100" stroke="currentColor"/></g>
-    </svg>
+  <div class="mugs">
+    <div class="parallax" data-depth="28"><div class="mug m1"><svg viewBox="0 0 100 110">
+      <path fill="currentColor" filter="url(#clayGrain)">
+        <animate attributeName="d" dur="13s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+          values="M20,14 C34,6 66,6 80,16 C92,24 90,44 86,54 C94,66 90,86 74,96 C60,106 40,106 26,96 C10,86 6,66 14,54 C10,44 8,24 20,14 Z;
+                  M24,10 C40,4 64,8 78,20 C88,30 84,46 90,56 C96,70 86,88 70,98 C56,108 42,104 28,94 C12,84 8,64 16,52 C6,42 12,20 24,10 Z;
+                  M18,18 C32,4 68,4 82,14 C94,22 86,42 92,54 C98,68 88,90 72,100 C58,110 38,108 24,98 C8,88 4,66 12,54 C4,42 6,26 18,18 Z;
+                  M20,14 C34,6 66,6 80,16 C92,24 90,44 86,54 C94,66 90,86 74,96 C60,106 40,106 26,96 C10,86 6,66 14,54 C10,44 8,24 20,14 Z"/>
+      </path>
+      <path class="cup-handle" d="M84,42 C106,44 106,70 84,74"/>
+    </svg></div></div>
+    <div class="parallax" data-depth="20"><div class="mug m2"><svg viewBox="0 0 100 110">
+      <path fill="currentColor" filter="url(#clayGrain)">
+        <animate attributeName="d" dur="17s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+          values="M18,18 C32,4 68,4 82,14 C94,22 86,42 92,54 C98,68 88,90 72,100 C58,110 38,108 24,98 C8,88 4,66 12,54 C4,42 6,26 18,18 Z;
+                  M20,14 C34,6 66,6 80,16 C92,24 90,44 86,54 C94,66 90,86 74,96 C60,106 40,106 26,96 C10,86 6,66 14,54 C10,44 8,24 20,14 Z;
+                  M24,10 C40,4 64,8 78,20 C88,30 84,46 90,56 C96,70 86,88 70,98 C56,108 42,104 28,94 C12,84 8,64 16,52 C6,42 12,20 24,10 Z;
+                  M18,18 C32,4 68,4 82,14 C94,22 86,42 92,54 C98,68 88,90 72,100 C58,110 38,108 24,98 C8,88 4,66 12,54 C4,42 6,26 18,18 Z"/>
+      </path>
+      <path class="cup-handle" d="M86,40 C104,42 104,66 86,70"/>
+    </svg></div></div>
+    <div class="parallax" data-depth="34"><div class="mug m3"><svg viewBox="0 0 100 110">
+      <path fill="currentColor" filter="url(#clayGrain)">
+        <animate attributeName="d" dur="11s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+          values="M24,10 C40,4 64,8 78,20 C88,30 84,46 90,56 C96,70 86,88 70,98 C56,108 42,104 28,94 C12,84 8,64 16,52 C6,42 12,20 24,10 Z;
+                  M18,18 C32,4 68,4 82,14 C94,22 86,42 92,54 C98,68 88,90 72,100 C58,110 38,108 24,98 C8,88 4,66 12,54 C4,42 6,26 18,18 Z;
+                  M20,14 C34,6 66,6 80,16 C92,24 90,44 86,54 C94,66 90,86 74,96 C60,106 40,106 26,96 C10,86 6,66 14,54 C10,44 8,24 20,14 Z;
+                  M24,10 C40,4 64,8 78,20 C88,30 84,46 90,56 C96,70 86,88 70,98 C56,108 42,104 28,94 C12,84 8,64 16,52 C6,42 12,20 24,10 Z"/>
+      </path>
+    </svg></div></div>
   </div>
   <div class="hero-inner">
     <p class="eyebrow" id="eyebrow">Team event</p>
     <h1 class="hero-title" id="title">Team Day</h1>
     <p class="tagline" id="tagline">A full day together, in person.</p>
-    <div class="countdown" id="countdown" aria-live="polite"></div>
+
+    <div class="countdown-ring">
+      <svg viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="54" fill="none" stroke="var(--line)" stroke-width="3"/>
+        <circle cx="60" cy="60" r="54" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="0"/>
+      </svg>
+      <div class="countdown-center">
+        <span class="cd-days" id="cd-days">–</span>
+        <span class="cd-lbl" id="cd-lbl">days to go</span>
+        <span class="cd-time" id="cd-time"></span>
+      </div>
+    </div>
+
     <div class="scroll-cue">↓ scroll for the plan</div>
   </div>
 </header>
@@ -191,20 +254,11 @@
 
   <section class="panel reveal">
     <div class="panel-inner">
-      <h2 class="section-title">Snapshots</h2>
-      <p class="section-sub">More to come.</p>
-      <div class="photos" id="photos"></div>
-    </div>
-  </section>
-
-  <section class="panel alt reveal">
-    <div class="panel-inner">
       <h2 class="section-title">Save the date</h2>
       <p class="section-sub">Get it on your calendar now — thank yourself later.</p>
       <div class="actions">
         <button class="btn primary" id="ics">⬇️ Add to calendar</button>
         <a class="btn ghost" id="gcal" target="_blank" rel="noopener">Google Calendar</a>
-        <a class="btn ghost" id="outlook" target="_blank" rel="noopener">Outlook</a>
       </div>
 
       <div class="rsvp-box">
@@ -234,30 +288,27 @@ const CONFIG = {
   start:    "2026-10-01 10:00",
   end:      "2026-10-01 23:00", // "open end" dinner capped here for calendar purposes
 
-  host:     "Anna",
   rsvpDeadline: "Friday, September 25",
 
   description:
-    "A full day to slow down and be a team again. Since we're remote-first, this is our " +
-    "chance to actually be in the same room: breakfast together, a relaxed walk (or tram) " +
-    "to a pottery studio, hands-on making, a breather back at the office with some vibe " +
-    "coding and design/coding games, and dinner that runs as long as we want. Mostly: " +
-    "sharing laughs and enjoying each other's company.",
+    "You're invited to a full day made to slow down and be a team again — to enjoy the " +
+    "whole team gathered in one place, which doesn't happen often since we're remote-first. " +
+    "Breakfast together, a relaxed walk (or tram) to a pottery studio, hands-on making, a " +
+    "breather back at the office with some team games (still brainstorming — got ideas?), " +
+    "and dinner that runs as long as we want. Mostly: sharing laughs and enjoying each " +
+    "other's company.",
 
+  // icon keys: coffee | walk | pottery | laptop | dinner
   // "map" is a best-guess search query (venue name only). Add a city/address for a
   // more reliable pin, e.g. "Auszeit, Vienna, Austria".
   agenda: [
-    { icon: "🥐", time: "10:00 – 11:00",    title: "Breakfast",          place: "Auszeit",                 map: "Auszeit" },
-    { icon: "🚶", time: "11:00 – 11:45",    title: "Walk (or tram) over", place: "Auszeit → Palavara Studio — 30 min walk or 24 min public transit", map: "Palavara Studio" },
-    { icon: "🏺", time: "12:00 – 14:30",    title: "Pottery workshop",    place: "Palavara Pottery Studio", map: "Palavara Pottery Studio",
-      note: "Clay gets messy — wear clothes you don't mind ruining (or bring a change), and leave jewelry/rings somewhere safe." },
-    { icon: "💻", time: "14:30 – 17:30",    title: "Break / activities",  place: "Office",                  map: "" },
-    { icon: "🍝", time: "17:30 – open end", title: "Dinner",              place: "Candyman",                map: "Candyman" },
+    { icon: "coffee",  time: "10:00 – 11:00",    title: "Breakfast",           place: "Auszeit",                 map: "Auszeit" },
+    { icon: "walk",    time: "11:00 – 11:45",    title: "Walk (or tram) over", place: "Auszeit → Palavara Studio — 30 min walk or 24 min public transit", map: "Palavara Studio" },
+    { icon: "pottery", time: "12:00 – 14:30",    title: "Pottery workshop",    place: "Palavara Pottery Studio", map: "Palavara Pottery Studio",
+      note: "You'll shape your own coffee mug to take home once fired. Wear clothes that can get messy (or bring a change), and leave jewelry/rings somewhere safe." },
+    { icon: "laptop",  time: "14:30 – 17:30",    title: "Break / activities",  place: "Office",                  map: "" },
+    { icon: "dinner",  time: "17:30 – open end", title: "Dinner",              place: "Candyman",                map: "Candyman" },
   ],
-
-  // Drop real image files into photos/ and list them here, e.g.
-  // { src: "photos/breakfast.jpg", alt: "Breakfast at Auszeit" }
-  photos: [],
 
   // RSVP happens in Slack. Fill in slackUrl to show an "Open Slack" button.
   slackChannel: "#team-day",
@@ -266,6 +317,14 @@ const CONFIG = {
   footer: "Questions? Email anna@inversestudio.io.",
 };
 /* ───────────────────────────────────────────────────────────── */
+
+const ICONS = {
+  coffee:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V9z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 4c-.5.8-.5 1.2 0 2M12 4c-.5.8-.5 1.2 0 2"/></svg>`,
+  walk:    `<svg viewBox="0 0 24 24" fill="currentColor"><ellipse cx="8" cy="7" rx="2.1" ry="3.1"/><ellipse cx="16" cy="15" rx="2.1" ry="3.1" transform="rotate(18 16 15)"/></svg>`,
+  pottery: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3c-1 2-1 3 .5 4.5C8 9 6 11.5 6 15a6 6 0 0 0 12 0c0-3.5-2-6-4.5-7.5C15 6 15 5 14 3"/></svg>`,
+  laptop:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="10" rx="1.5"/><path d="M2 19h20"/></svg>`,
+  dinner:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a2 2 0 0 0 4 0V3"/><path d="M8 10v11"/><path d="M16 3c-1.5 0-2 2-2 4s.5 4 2 4 2-2 2-4-.5-4-2-4z"/><path d="M16 11v10"/></svg>`,
+};
 
 function toDate(s) {
   const [d, t] = s.split(" ");
@@ -299,9 +358,10 @@ const facts = [
 document.getElementById("facts").innerHTML = facts.map(f => `<li><span class="k">${f.k}</span><span class="v">${f.v}</span></li>`).join("");
 
 document.getElementById("agenda").innerHTML = CONFIG.agenda.map((item, i) => `
-  <div class="a-card${item.icon === "🏺" ? " pottery" : ""}" data-i="${i}">
+  <div class="a-card${item.icon === "pottery" ? " pottery" : ""}" data-i="${i}">
+    <div class="a-bg-icon">${ICONS[item.icon] || ""}</div>
     <div class="a-top">
-      <span class="a-icon">${item.icon || "•"}</span>
+      <span class="a-icon">${ICONS[item.icon] || ""}</span>
       <div>
         <span class="time">${item.time}</span>
         <span class="a-title">${item.title}</span>
@@ -317,31 +377,27 @@ document.getElementById("agenda").innerHTML = CONFIG.agenda.map((item, i) => `
 ).join("");
 document.querySelectorAll(".a-card").forEach(card => card.addEventListener("click", () => card.classList.toggle("open")));
 
-const photosEl = document.getElementById("photos");
-if (CONFIG.photos && CONFIG.photos.length) {
-  photosEl.innerHTML = CONFIG.photos.map(p => `<div class="photo-tile"><img src="${p.src}" alt="${p.alt || ""}"></div>`).join("");
-} else {
-  photosEl.innerHTML = ["🥐","🏺","🍽️"].map(e => `<div class="photo-tile" style="color:var(--accent)">${e}</div>`).join("");
-}
-
 document.getElementById("rsvp-text").textContent = `Reply in ${CONFIG.slackChannel} on Slack by ${CONFIG.rsvpDeadline}.`;
 const rsvpBtn = document.getElementById("rsvp-btn");
 if (CONFIG.slackUrl) { rsvpBtn.href = CONFIG.slackUrl; } else { rsvpBtn.style.display = "none"; }
 
-/* ---------- countdown ---------- */
-const countdownEl = document.getElementById("countdown");
+/* ---------- countdown (circular dial) ---------- */
+const cdDays = document.getElementById("cd-days");
+const cdLbl = document.getElementById("cd-lbl");
+const cdTime = document.getElementById("cd-time");
 function renderCountdown() {
   const diff = start - new Date();
   if (diff <= 0) {
-    countdownEl.innerHTML = `<div class="unit"><span class="num">🎉</span><span class="lbl">It's happening</span></div>`;
+    cdDays.textContent = "🎉"; cdLbl.textContent = "it's today"; cdTime.textContent = "";
     return;
   }
   const d = Math.floor(diff / 86400000);
   const h = Math.floor(diff / 3600000) % 24;
   const m = Math.floor(diff / 60000) % 60;
   const s = Math.floor(diff / 1000) % 60;
-  const units = [["Days", d], ["Hrs", h], ["Min", m], ["Sec", s]];
-  countdownEl.innerHTML = units.map(([lbl, v]) => `<div class="unit"><span class="num">${z(v)}</span><span class="lbl">${lbl}</span></div>`).join("");
+  cdDays.textContent = d;
+  cdLbl.textContent = d === 1 ? "day to go" : "days to go";
+  cdTime.textContent = `${z(h)}:${z(m)}:${z(s)}`;
 }
 renderCountdown();
 setInterval(renderCountdown, 1000);
@@ -352,13 +408,20 @@ const io = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
-/* ---------- cursor glow (desktop only) ---------- */
+/* ---------- cursor-reactive hero (desktop only) ---------- */
 if (window.matchMedia("(pointer: fine)").matches && !reduceMotion) {
   const glow = document.getElementById("glow");
+  const wraps = document.querySelectorAll(".parallax");
   window.addEventListener("mousemove", (e) => {
     glow.style.setProperty("--gx", e.clientX + "px");
     glow.style.setProperty("--gy", e.clientY + "px");
     glow.style.opacity = "1";
+    const nx = (e.clientX / innerWidth - 0.5) * 2;
+    const ny = (e.clientY / innerHeight - 0.5) * 2;
+    wraps.forEach(w => {
+      const depth = parseFloat(w.dataset.depth) || 10;
+      w.style.transform = `translate(${nx * depth}px, ${ny * depth}px)`;
+    });
   });
   window.addEventListener("mouseleave", () => { glow.style.opacity = "0"; });
 }
@@ -371,7 +434,7 @@ resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 function burstConfetti() {
   if (reduceMotion) return;
-  const colors = ["#5b5bf0", "#ff8a65", "#2bd4a8", "#ffd166"];
+  const colors = ["#a8674a", "#7eaaff", "#e2d4bf", "#241f18"];
   const N = 90;
   const particles = Array.from({ length: N }, () => ({
     x: canvas.width / 2, y: canvas.height / 2,
@@ -429,16 +492,6 @@ g.searchParams.set("text", CONFIG.title);
 g.searchParams.set("dates", `${icsStamp(start)}/${icsStamp(end)}`);
 g.searchParams.set("details", CONFIG.description + "\n\n" + CONFIG.agenda.map(a => `${a.time} — ${a.title} (${a.place})`).join("\n"));
 document.getElementById("gcal").href = g.toString();
-
-/* Outlook web link */
-const o = new URL("https://outlook.office.com/calendar/0/deeplink/compose");
-o.searchParams.set("path", "/calendar/action/compose");
-o.searchParams.set("rru", "addevent");
-o.searchParams.set("subject", CONFIG.title);
-o.searchParams.set("startdt", start.toISOString());
-o.searchParams.set("enddt", end.toISOString());
-o.searchParams.set("body", CONFIG.description);
-document.getElementById("outlook").href = o.toString();
 </script>
 </body>
 </html>

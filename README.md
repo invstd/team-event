@@ -16,10 +16,11 @@ add it to their calendar (or RSVP). No build step, no framework, no backend.
 | Hosting | ✅ GitHub Pages |
 | Repo visibility | ✅ Public (required for free GitHub Pages — nothing sensitive on an invite page) |
 | Language | ✅ English |
-| Visual style | ✅ Modern, playful, minimal — light/dark aware, one accent color (`--accent` in `index.html`, currently a placeholder violet — swap for your brand color any time), drifting background shapes |
+| Visual style | ✅ Calm clay/sand base (warm neutrals), one true accent color pulled from Inverse Studio's real site (`#7eaaff` periwinkle) used sparingly for buttons/links/highlights. Organic drifting shapes; hero has three hand-morphing "raw clay" blobs with a grain texture filter. |
 | RSVP method | ✅ Slack — page says "reply in `#team-day`". Add a real link in `CONFIG.slackUrl` (in `index.html`) to turn on the "Open Slack" button; until then it just shows the text. |
 | Maps | Auto-generated Google Maps search links per agenda stop, from the venue name only. Add a city/address to `CONFIG.agenda[].map` in `index.html` for a more precise pin. |
-| Photos | Placeholder tiles for now (no images available to me). Drop real files into `photos/` and list them in `CONFIG.photos` in `index.html` to swap them in. |
+| Photos | Removed from the page for now (nothing to show yet, placeholder tiles were confusing). `photos/` folder is still there — drop files in and I can add a gallery section back once there's something real to display. |
+| Games for the office block | _TBD_ — "vibe coding" wasn't confirmed. See brainstormed options below; pick one (or more) and I'll write it into the page. |
 | Event content | ✅ Filled in — see interview notes below |
 
 ---
@@ -138,3 +139,12 @@ Date format is 24-hour local time: `"YYYY-MM-DD HH:MM"`.
 - **Company:** Inverse Studio (a design company — page should feel fun/playful/modern over corporate; explicitly does *not* need to match the studio's actual brand)
 - **Prep note for pottery:** wear clothes that can get messy (or bring a change), leave jewelry/rings somewhere safe
 - **Still open:** exact addresses for Auszeit / Palavara / Candyman (nice-to-have, map links currently just search the venue name)
+
+### Game ideas for the 14:30–17:30 office block (brainstorm — pick some)
+
+- **Figma Speed Draw** — Pictionary, but you recreate a given UI or logo in Figma against the clock
+- **Design Roast** — everyone redesigns a notoriously ugly website live in 10 minutes, funniest wins
+- **Guess the Font** — identify typefaces from zoomed-in letterforms
+- **AI Prompt Battle** — same brief, everyone prompts an image generator, funniest/best result wins
+- **CSS Battle** — short constrained layout-replication challenge, closest match wins
+- **Bug Hunt Bingo** — hide intentional bugs on a page, first to spot them all wins
