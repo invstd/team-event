@@ -7,25 +7,22 @@
 <meta name="description" content="Team Day — October 1, 2026" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,600;0,700;0,900;1,600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f4e9df;
-    --panel: #fbf4ec;
-    --panel-alt: #ece0d0;
-    --ink: #34261d;
-    --muted: #96826f;
-    --clay: #b8886a;      /* dusty terracotta — icons, details */
-    --accent: #7a4f3f;    /* deep warm brown — the one tonal accent, no bright pop */
-    --accent-ink: #fbf4ec;
-    --line: #e3d3c1;
+    --bg: #e9e3d5;
+    --panel: #f6f1e6;
+    --panel-alt: #ddd3bd;
+    --ink: #241d14;
+    --muted: #756b58;
+    --clay: #8a4a2e;      /* fired terracotta — the hero vessel, icons, details */
+    --accent: #7eaaff;    /* Inverse Studio's actual blue — used boldly, not just as a hint */
+    --accent-ink: #10131c;
+    --line: #d6cbae;
+    --handtone: #cbb89e; /* neutral putty tone for the hand silhouettes — not a specific skin color */
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #241a13; --panel: #2c2117; --panel-alt: #34271b; --ink: #f3e6d8; --muted: #c2ab95;
-      --clay: #cf9a76; --accent: #e0a97e; --accent-ink: #241a13; --line: #4a3826;
-    }
-  }
+  /* dark-mode variant intentionally removed — page always renders this one light design,
+     regardless of viewer system settings, so every colleague sees the same thing. */
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
@@ -55,33 +52,36 @@
   @keyframes float3 { 0%,100% { transform: translate(0,0) rotate(0); } 50% { transform: translate(-35px,45px) rotate(12deg); } }
   @media (prefers-reduced-motion: reduce) { .blob, .mug, html { animation: none !important; scroll-behavior: auto !important; } .parallax { transition: none; } }
 
+  /* ---------- hero vessel (single, calm — no longer three drifting cups) ---------- */
   .mug { position: absolute; }
   .mug svg { width: 100%; height: 100%; display: block; overflow: visible; }
-  .mug .cup-handle { fill: none; stroke: currentColor; stroke-width: 4; opacity: .7; }
-  .mug.m1 { width: 150px; height: 180px; color: var(--clay); right: 6%; bottom: 6%; opacity: .8; animation: mug1 15s ease-in-out infinite; }
-  .mug.m2 { width: 96px; height: 115px; color: var(--clay); right: 25%; bottom: 30%; opacity: .55; animation: mug2 19s ease-in-out infinite; }
-  .mug.m3 { width: 68px; height: 82px; color: var(--accent); right: 2%; bottom: 40%; opacity: .7; animation: mug3 17s ease-in-out infinite; }
-  @keyframes mug1 { 0%,100% { transform: translate(0,0) rotate(-4deg); } 50% { transform: translate(-16px,-18px) rotate(5deg); } }
-  @keyframes mug2 { 0%,100% { transform: translate(0,0) rotate(6deg); } 50% { transform: translate(12px,-16px) rotate(-6deg); } }
-  @keyframes mug3 { 0%,100% { transform: translate(0,0) rotate(-8deg); } 50% { transform: translate(-10px,14px) rotate(8deg); } }
+  .mug .cup-handle { fill: none; stroke: var(--clay); stroke-width: 3.5; }
+  .hands { position: absolute; right: 6%; bottom: 0; width: clamp(170px, 22vw, 250px); height: clamp(210px, 27vw, 310px); }
+  @media (max-height: 700px) { .hands { width: clamp(140px, 18vw, 200px); height: clamp(170px, 22vw, 250px); } }
+  .hero-photo {
+    width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 22px 22px 4px 4px;
+    box-shadow: 0 30px 60px -24px rgba(20,12,6,.45);
+    -webkit-mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+  }
+  .photo-credit { position: absolute; bottom: 6px; right: 6px; font-size: 10px; color: #fff; opacity: .55; text-shadow: 0 1px 2px rgba(0,0,0,.5); }
 
   .hero-inner { position: relative; z-index: 1; text-align: center; max-width: 760px; }
   .eyebrow { text-transform: uppercase; letter-spacing: .18em; font-size: 13px; font-weight: 700; color: var(--accent); margin: 0 0 18px; }
   .hero-title {
-    font-size: clamp(48px, 11vw, 108px); font-weight: 800; line-height: .95; margin: 0 0 18px; letter-spacing: -0.03em;
-    background: linear-gradient(120deg, var(--ink) 35%, var(--clay) 65%, var(--accent) 100%);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    background-size: 250% auto; animation: shine 18s linear infinite;
+    font-family: "Fraunces", "Outfit", serif;
+    font-size: clamp(48px, 11vw, 108px); font-weight: 700; line-height: .92; margin: 0 0 18px; letter-spacing: -0.01em;
+    color: var(--accent);
   }
-  @keyframes shine { to { background-position: 250% center; } }
+  .hero-title .letter { display: inline-block; transform: rotate(var(--r, 0deg)); animation: clayWobble ease-in-out infinite; animation-duration: var(--dur, 4s); animation-delay: var(--delay, 0s); }
+  @keyframes clayWobble { 0%, 100% { transform: rotate(var(--r, 0deg)); } 50% { transform: rotate(calc(var(--r, 0deg) * -0.55)); } }
+  @media (prefers-reduced-motion: reduce) { .hero-title .letter { animation: none; transform: none; } }
   .tagline { font-size: clamp(16px, 2.4vw, 21px); color: var(--muted); margin: 0 0 40px; font-weight: 500; }
 
-  .countdown-ring { position: relative; width: clamp(150px, 34vw, 190px); height: clamp(150px, 34vw, 190px); margin: 0 auto 44px; }
-  .countdown-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-  .countdown-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .cd-days { font-size: clamp(32px, 7vw, 44px); font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
-  .cd-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-top: 4px; }
-  .cd-time { font-size: 13px; color: var(--muted); margin-top: 8px; font-variant-numeric: tabular-nums; letter-spacing: .03em; }
+  .countdown { display: flex; gap: clamp(10px,3vw,22px); justify-content: center; margin-bottom: 44px; flex-wrap: wrap; }
+  .countdown .unit { min-width: 76px; }
+  .countdown .num { font-size: clamp(28px, 5vw, 44px); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; color: var(--accent); }
+  .countdown .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-top: 6px; display: block; }
 
   .scroll-cue { font-size: 13px; color: var(--muted); letter-spacing: .08em; animation: bob 2s ease-in-out infinite; }
   @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
@@ -159,7 +159,6 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 140px 140px;
   }
-  @media (prefers-color-scheme: dark) { .paper-grain { opacity: .08; mix-blend-mode: overlay; } }
 </style>
 </head>
 <body>
@@ -174,6 +173,10 @@
       <feComposite in="grain" in2="SourceGraphic" operator="in" result="grainClip"/>
       <feBlend in="SourceGraphic" in2="grainClip" mode="multiply"/>
     </filter>
+    <filter id="roughEdge" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.025 0.045" numOctaves="2" seed="5" result="wobble"/>
+      <feDisplacementMap in="SourceGraphic" in2="wobble" scale="13" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
     <filter id="softBlur" x="-60%" y="-60%" width="220%" height="220%">
       <feGaussianBlur stdDeviation="4"/>
     </filter>
@@ -187,6 +190,14 @@
       <stop offset="55%" style="stop-color:var(--accent)"/>
       <stop offset="100%" style="stop-color:color-mix(in srgb, var(--accent) 65%, #10131c)"/>
     </linearGradient>
+    <linearGradient id="bisqueVolume" x1="15%" y1="5%" x2="90%" y2="100%">
+      <stop offset="0%" style="stop-color:#fffdf8"/>
+      <stop offset="55%" style="stop-color:#f2ead9"/>
+      <stop offset="100%" style="stop-color:#d7c8ac"/>
+    </linearGradient>
+    <clipPath id="miniMugClip" clipPathUnits="userSpaceOnUse">
+      <path d="M20,14 C14,14 10,24 10,38 C10,54 14,62 22,66 C26,68 34,68 38,66 C46,62 50,54 50,38 C50,24 46,14 40,14 C36,11 24,11 20,14 Z"/>
+    </clipPath>
   </defs>
 </svg>
 
@@ -196,94 +207,18 @@
     <div class="parallax" data-depth="10"><div class="blob b2"></div></div>
     <div class="parallax" data-depth="22"><div class="blob b3"></div></div>
   </div>
-  <div class="mugs">
-    <!-- each cup cycles through: lump on the wheel -> opening -> tall cylinder -> finished mug -> repeat.
-         the three are offset in the cycle and run at different speeds, like a studio with several
-         pieces in progress at once rather than one shape idly wobbling. -->
-    <div class="parallax" data-depth="28"><div class="mug m1"><svg viewBox="0 0 100 120">
-      <path fill="var(--ink)" opacity=".16" filter="url(#softBlur)" transform="translate(5,9)">
-        <animate attributeName="d" dur="20s" repeatCount="indefinite" calcMode="spline"
-          keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
-          values="M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z;
-                  M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z;
-                  M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z;
-                  M26,18 C34,10 66,10 74,18 C82,26 80,46 84,58 C88,74 82,94 68,102 C58,108 42,108 32,102 C18,94 12,74 16,58 C20,46 18,26 26,18 Z;
-                  M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z"/>
-      </path>
-      <path fill="url(#clayVolume)" filter="url(#clayGrain)">
-        <animate attributeName="d" dur="20s" repeatCount="indefinite" calcMode="spline"
-          keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
-          values="M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z;
-                  M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z;
-                  M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z;
-                  M26,18 C34,10 66,10 74,18 C82,26 80,46 84,58 C88,74 82,94 68,102 C58,108 42,108 32,102 C18,94 12,74 16,58 C20,46 18,26 26,18 Z;
-                  M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z"/>
-      </path>
-      <ellipse class="cup-highlight" cx="40" cy="34" rx="16" ry="11" fill="#fff8ec" opacity=".3" filter="url(#softBlur)"/>
-      <path class="cup-handle" d="M84,50 C106,52 106,78 84,82" opacity=".65"/>
-    </svg></div></div>
-
-    <div class="parallax" data-depth="20"><div class="mug m2"><svg viewBox="0 0 100 120">
-      <path fill="var(--ink)" opacity=".14" filter="url(#softBlur)" transform="translate(4,8)">
-        <animate attributeName="d" dur="16s" repeatCount="indefinite" calcMode="spline"
-          keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
-          values="M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z;
-                  M26,18 C34,10 66,10 74,18 C82,26 80,46 84,58 C88,74 82,94 68,102 C58,108 42,108 32,102 C18,94 12,74 16,58 C20,46 18,26 26,18 Z;
-                  M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z;
-                  M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z;
-                  M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z"/>
-      </path>
-      <path fill="url(#clayVolume)" filter="url(#clayGrain)">
-        <animate attributeName="d" dur="16s" repeatCount="indefinite" calcMode="spline"
-          keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
-          values="M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z;
-                  M26,18 C34,10 66,10 74,18 C82,26 80,46 84,58 C88,74 82,94 68,102 C58,108 42,108 32,102 C18,94 12,74 16,58 C20,46 18,26 26,18 Z;
-                  M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z;
-                  M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z;
-                  M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z"/>
-      </path>
-      <ellipse class="cup-highlight" cx="38" cy="30" rx="12" ry="8" fill="#fff8ec" opacity=".28" filter="url(#softBlur)"/>
-      <path class="cup-handle" d="M74,40 C92,42 92,64 74,68" opacity=".6"/>
-    </svg></div></div>
-
-    <div class="parallax" data-depth="34"><div class="mug m3"><svg viewBox="0 0 100 120">
-      <path fill="var(--ink)" opacity=".14" filter="url(#softBlur)" transform="translate(4,7)">
-        <animate attributeName="d" dur="13s" repeatCount="indefinite" calcMode="spline"
-          keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
-          values="M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z;
-                  M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z;
-                  M26,18 C34,10 66,10 74,18 C82,26 80,46 84,58 C88,74 82,94 68,102 C58,108 42,108 32,102 C18,94 12,74 16,58 C20,46 18,26 26,18 Z;
-                  M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z;
-                  M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z"/>
-      </path>
-      <path fill="url(#accentVolume)" filter="url(#clayGrain)">
-        <animate attributeName="d" dur="13s" repeatCount="indefinite" calcMode="spline"
-          keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
-          values="M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z;
-                  M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z;
-                  M26,18 C34,10 66,10 74,18 C82,26 80,46 84,58 C88,74 82,94 68,102 C58,108 42,108 32,102 C18,94 12,74 16,58 C20,46 18,26 26,18 Z;
-                  M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z;
-                  M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z"/>
-      </path>
-      <ellipse class="cup-highlight" cx="35" cy="30" rx="10" ry="7" fill="#fff8ec" opacity=".3" filter="url(#softBlur)"/>
-    </svg></div></div>
+  <div class="hands">
+    <div class="parallax" data-depth="14">
+      <img class="hero-photo" src="https://images.unsplash.com/photo-1590605095243-072811dbe64c?q=80&w=1000&auto=format&fit=crop" alt="Hands shaping a clay vase on a pottery wheel" loading="eager"/>
+      <span class="photo-credit">Photo: Courtney Cook / Unsplash</span>
+    </div>
   </div>
   <div class="hero-inner">
     <p class="eyebrow" id="eyebrow">Team event</p>
     <h1 class="hero-title" id="title">Team Day</h1>
     <p class="tagline" id="tagline">A full day together, in person.</p>
 
-    <div class="countdown-ring">
-      <svg viewBox="0 0 120 120">
-        <circle cx="60" cy="60" r="54" fill="none" stroke="var(--line)" stroke-width="3"/>
-        <circle cx="60" cy="60" r="54" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="0"/>
-      </svg>
-      <div class="countdown-center">
-        <span class="cd-days" id="cd-days">–</span>
-        <span class="cd-lbl" id="cd-lbl">days to go</span>
-        <span class="cd-time" id="cd-time"></span>
-      </div>
-    </div>
+    <div class="countdown" id="countdown" aria-live="polite"></div>
 
     <div class="scroll-cue">↓ scroll for the plan</div>
   </div>
@@ -311,8 +246,7 @@
       <h2 class="section-title">Save the date</h2>
       <p class="section-sub">Get it on your calendar now — thank yourself later.</p>
       <div class="actions">
-        <button class="btn primary" id="ics">⬇️ Add to calendar</button>
-        <a class="btn ghost" id="gcal" target="_blank" rel="noopener">Google Calendar</a>
+        <a class="btn primary" id="gcal" target="_blank" rel="noopener">📅 Add to Google Calendar</a>
       </div>
 
       <div class="rsvp-box">
@@ -356,12 +290,12 @@ const CONFIG = {
   // "map" is a best-guess search query (venue name only). Add a city/address for a
   // more reliable pin, e.g. "Auszeit, Vienna, Austria".
   agenda: [
-    { icon: "coffee",  time: "10:00 – 11:00",    title: "Breakfast",           place: "Auszeit",                 map: "Auszeit" },
-    { icon: "walk",    time: "11:00 – 11:45",    title: "Walk (or tram) over", place: "Auszeit → Palavara Studio — 30 min walk or 24 min public transit", map: "Palavara Studio" },
-    { icon: "pottery", time: "12:00 – 14:30",    title: "Pottery workshop",    place: "Palavara Pottery Studio", map: "Palavara Pottery Studio",
+    { icon: "coffee",  time: "10:00 – 11:00",    title: "Breakfast",           place: "Auszeit",                 map: "Auszeit, Pankow, Berlin" },
+    { icon: "walk",    time: "11:00 – 11:45",    title: "Walk (or tram) over", place: "Auszeit → Palavara Studio — 30 min walk or 24 min public transit", map: "Palavara Studio, Pankow, Berlin" },
+    { icon: "pottery", time: "12:00 – 14:30",    title: "Pottery workshop",    place: "Palavara Pottery Studio", map: "Palavara Pottery Studio, Pankow, Berlin",
       note: "You'll shape your own coffee mug to take home once fired. Wear clothes that can get messy (or bring a change), and leave jewelry/rings somewhere safe." },
     { icon: "laptop",  time: "14:30 – 17:30",    title: "Break / activities",  place: "Office",                  map: "" },
-    { icon: "dinner",  time: "17:30 – open end", title: "Dinner",              place: "Candyman",                map: "Candyman" },
+    { icon: "dinner",  time: "17:30 – open end", title: "Dinner",              place: "Candyman",                map: "Candyman, Pankow, Berlin" },
   ],
 
   // RSVP happens in Slack. Fill in slackUrl to show an "Open Slack" button.
@@ -388,8 +322,6 @@ function toDate(s) {
 }
 function z(n) { return String(n).padStart(2, "0"); }
 function icsStamp(dt) { return `${dt.getFullYear()}${z(dt.getMonth()+1)}${z(dt.getDate())}T${z(dt.getHours())}${z(dt.getMinutes())}00`; }
-function icsUTC(dt) { return `${dt.getUTCFullYear()}${z(dt.getUTCMonth()+1)}${z(dt.getUTCDate())}T${z(dt.getUTCHours())}${z(dt.getUTCMinutes())}${z(dt.getUTCSeconds())}Z`; }
-function icsEscape(s) { return String(s).replace(/\\/g, "\\\\").replace(/,/g, "\\,").replace(/;/g, "\\;").replace(/\n/g, "\\n"); }
 function mapsHref(q) { return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q); }
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -397,8 +329,16 @@ const start = toDate(CONFIG.start);
 const end = toDate(CONFIG.end);
 
 document.getElementById("eyebrow").textContent = CONFIG.eyebrow;
-document.getElementById("title").textContent = CONFIG.title;
 document.title = CONFIG.title;
+const titleEl = document.getElementById("title");
+const rotations = [-7, 5, -4, 7, -5, 4, -6, 6];
+titleEl.innerHTML = CONFIG.title.split("").map((ch, i) => {
+  if (ch === " ") return " ";
+  const r = rotations[i % rotations.length];
+  const dur = (3.2 + (i % 4) * 0.7).toFixed(1);
+  const delay = ((i % 5) * 0.25).toFixed(2);
+  return `<span class="letter" style="--r:${r}deg; --dur:${dur}s; --delay:${delay}s">${ch}</span>`;
+}).join("");
 document.getElementById("tagline").textContent = CONFIG.tagline;
 document.getElementById("desc").textContent = CONFIG.description;
 document.getElementById("footer").textContent = CONFIG.footer;
@@ -435,23 +375,20 @@ document.getElementById("rsvp-text").textContent = `Reply in ${CONFIG.slackChann
 const rsvpBtn = document.getElementById("rsvp-btn");
 if (CONFIG.slackUrl) { rsvpBtn.href = CONFIG.slackUrl; } else { rsvpBtn.style.display = "none"; }
 
-/* ---------- countdown (circular dial) ---------- */
-const cdDays = document.getElementById("cd-days");
-const cdLbl = document.getElementById("cd-lbl");
-const cdTime = document.getElementById("cd-time");
+/* ---------- countdown (Days / Hrs / Min / Sec grid) ---------- */
+const countdownEl = document.getElementById("countdown");
 function renderCountdown() {
   const diff = start - new Date();
   if (diff <= 0) {
-    cdDays.textContent = "🎉"; cdLbl.textContent = "it's today"; cdTime.textContent = "";
+    countdownEl.innerHTML = `<div class="unit"><span class="num">🎉</span><span class="lbl">It's happening</span></div>`;
     return;
   }
   const d = Math.floor(diff / 86400000);
   const h = Math.floor(diff / 3600000) % 24;
   const m = Math.floor(diff / 60000) % 60;
   const s = Math.floor(diff / 1000) % 60;
-  cdDays.textContent = d;
-  cdLbl.textContent = d === 1 ? "day to go" : "days to go";
-  cdTime.textContent = `${z(h)}:${z(m)}:${z(s)}`;
+  const units = [["Days", d], ["Hrs", h], ["Min", m], ["Sec", s]];
+  countdownEl.innerHTML = units.map(([lbl, v]) => `<div class="unit"><span class="num">${z(v)}</span><span class="lbl">${lbl}</span></div>`).join("");
 }
 renderCountdown();
 setInterval(renderCountdown, 1000);
@@ -488,50 +425,42 @@ resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 function burstConfetti() {
   if (reduceMotion) return;
-  const colors = ["#b8886a", "#7a4f3f", "#e3d3c1", "#34261d"];
-  const N = 90;
+  const colors = ["#b8886a", "#7eaaff", "#e3a857", "#c97b6a", "#e3d3c1", "#7c9a5e"];
+  const N = 160;
   const particles = Array.from({ length: N }, () => ({
-    x: canvas.width / 2, y: canvas.height / 2,
-    vx: (Math.random() - 0.5) * 14, vy: (Math.random() - 1.4) * 14,
-    size: 5 + Math.random() * 5, color: colors[Math.floor(Math.random() * colors.length)],
-    rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3, life: 1,
+    x: Math.random() * canvas.width,
+    y: -30 - Math.random() * canvas.height * 0.6,
+    vx: (Math.random() - 0.5) * 1.6,
+    vy: 2.5 + Math.random() * 3,
+    size: 6 + Math.random() * 7,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.25,
+    sway: Math.random() * Math.PI * 2, life: 1,
   }));
   let frame = 0;
   function tick() {
     frame++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let anyAlive = false;
     particles.forEach(p => {
-      p.vy += 0.35; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life -= 0.012;
+      if (p.life <= 0) return;
+      p.y += p.vy;
+      p.x += p.vx + Math.sin((frame + p.sway) * 0.05) * 0.7;
+      p.rot += p.vr;
+      if (p.y > canvas.height + 20) { p.life = 0; return; }
+      anyAlive = true;
       ctx.save();
-      ctx.globalAlpha = Math.max(p.life, 0);
+      ctx.globalAlpha = Math.min(1, (canvas.height + 20 - p.y) / 40);
       ctx.translate(p.x, p.y); ctx.rotate(p.rot);
       ctx.fillStyle = p.color;
-      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.55);
       ctx.restore();
     });
-    if (frame < 140) requestAnimationFrame(tick); else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (anyAlive && frame < 400) requestAnimationFrame(tick); else ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
   tick();
 }
-document.getElementById("ics").addEventListener("click", () => {
-  burstConfetti();
-  const fullDesc = CONFIG.description + "\n\n" + CONFIG.agenda.map(a => `${a.time} — ${a.title} (${a.place})`).join("\n");
-  const text = [
-    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//claude-projects//team-event//EN",
-    "CALSCALE:GREGORIAN", "METHOD:PUBLISH", "BEGIN:VEVENT",
-    `UID:${icsStamp(start)}-team-day@local`,
-    `DTSTAMP:${icsUTC(new Date())}`,
-    `DTSTART:${icsUTC(start)}`,
-    `DTEND:${icsUTC(end)}`,
-    `SUMMARY:${icsEscape(CONFIG.title)}`,
-    `DESCRIPTION:${icsEscape(fullDesc)}`,
-    "END:VEVENT", "END:VCALENDAR",
-  ].join("\r\n");
-  const blob = new Blob([text], { type: "text/calendar;charset=utf-8" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob); a.download = "team-day.ics";
-  document.body.appendChild(a); a.click(); a.remove();
-});
+document.getElementById("gcal").addEventListener("click", burstConfetti);
 document.getElementById("hype").addEventListener("click", (e) => {
   burstConfetti();
   e.target.textContent = "Woo! Don't forget Slack 👀";
