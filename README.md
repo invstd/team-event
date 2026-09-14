@@ -16,7 +16,7 @@ add it to their calendar (or RSVP). No build step, no framework, no backend.
 | Hosting | ✅ GitHub Pages |
 | Repo visibility | ✅ Public (required for free GitHub Pages — nothing sensitive on an invite page) |
 | Language | ✅ English |
-| Visual style | ✅ Calm clay/sand base (warm neutrals), one true accent color pulled from Inverse Studio's real site (`#7eaaff` periwinkle) used sparingly for buttons/links/highlights. Organic drifting shapes; hero has three hand-morphing "raw clay" blobs with a grain texture filter. |
+| Visual style | ✅ Fully tonal, muted, editorial earth palette (warm beige base, dusty terracotta, deep brown) — modeled on a reference the user shared ("down-to-earth beauty brand" palettes). No bright pop color, including the Inverse Studio periwinkle blue, which was dropped in favor of this — flag if that brand tie-in should come back somewhere small. Hero has three volumetric clay-shaded cups (gradient + shadow + highlight) that morph through actual pottery-forming stages — lump → opening → cylinder → finished mug — each offset so it reads as a working studio, not one shape wobbling. |
 | RSVP method | ✅ Slack — page says "reply in `#team-day`". Add a real link in `CONFIG.slackUrl` (in `index.html`) to turn on the "Open Slack" button; until then it just shows the text. |
 | Maps | Auto-generated Google Maps search links per agenda stop, from the venue name only. Add a city/address to `CONFIG.agenda[].map` in `index.html` for a more precise pin. |
 | Photos | Removed from the page for now (nothing to show yet, placeholder tiles were confusing). `photos/` folder is still there — drop files in and I can add a gallery section back once there's something real to display. |

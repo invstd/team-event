@@ -10,20 +10,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f5ede0;
-    --panel: #fffaf3;
-    --panel-alt: #ece0cd;
-    --ink: #241f18;
-    --muted: #8c8072;
-    --clay: #a8674a;         /* warm neutral clay, used for icons/details — not the "pop" */
-    --accent: #7eaaff;       /* Inverse Studio's real accent — the one splash of color */
-    --accent-ink: #0b0d14;
-    --line: #e2d4bf;
+    --bg: #f4e9df;
+    --panel: #fbf4ec;
+    --panel-alt: #ece0d0;
+    --ink: #34261d;
+    --muted: #96826f;
+    --clay: #b8886a;      /* dusty terracotta — icons, details */
+    --accent: #7a4f3f;    /* deep warm brown — the one tonal accent, no bright pop */
+    --accent-ink: #fbf4ec;
+    --line: #e3d3c1;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1a160f; --panel: #221b13; --panel-alt: #2a2118; --ink: #f2e8d8; --muted: #ab9d89;
-      --clay: #c98865; --accent: #7eaaff; --accent-ink: #0b0d14; --line: #392f20;
+      --bg: #241a13; --panel: #2c2117; --panel-alt: #34271b; --ink: #f3e6d8; --muted: #c2ab95;
+      --clay: #cf9a76; --accent: #e0a97e; --accent-ink: #241a13; --line: #4a3826;
     }
   }
   * { box-sizing: border-box; }
@@ -58,9 +58,9 @@
   .mug { position: absolute; }
   .mug svg { width: 100%; height: 100%; display: block; overflow: visible; }
   .mug .cup-handle { fill: none; stroke: currentColor; stroke-width: 4; opacity: .7; }
-  .mug.m1 { width: 150px; height: 165px; color: var(--clay); right: 6%; bottom: 8%; opacity: .55; animation: mug1 15s ease-in-out infinite; }
-  .mug.m2 { width: 96px; height: 106px; color: var(--clay); right: 24%; bottom: 32%; opacity: .4; animation: mug2 19s ease-in-out infinite; }
-  .mug.m3 { width: 68px; height: 75px; color: var(--accent); right: 2%; bottom: 40%; opacity: .6; animation: mug3 17s ease-in-out infinite; }
+  .mug.m1 { width: 150px; height: 180px; color: var(--clay); right: 6%; bottom: 6%; opacity: .8; animation: mug1 15s ease-in-out infinite; }
+  .mug.m2 { width: 96px; height: 115px; color: var(--clay); right: 25%; bottom: 30%; opacity: .55; animation: mug2 19s ease-in-out infinite; }
+  .mug.m3 { width: 68px; height: 82px; color: var(--accent); right: 2%; bottom: 40%; opacity: .7; animation: mug3 17s ease-in-out infinite; }
   @keyframes mug1 { 0%,100% { transform: translate(0,0) rotate(-4deg); } 50% { transform: translate(-16px,-18px) rotate(5deg); } }
   @keyframes mug2 { 0%,100% { transform: translate(0,0) rotate(6deg); } 50% { transform: translate(12px,-16px) rotate(-6deg); } }
   @keyframes mug3 { 0%,100% { transform: translate(0,0) rotate(-8deg); } 50% { transform: translate(-10px,14px) rotate(8deg); } }
@@ -174,6 +174,19 @@
       <feComposite in="grain" in2="SourceGraphic" operator="in" result="grainClip"/>
       <feBlend in="SourceGraphic" in2="grainClip" mode="multiply"/>
     </filter>
+    <filter id="softBlur" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+    <linearGradient id="clayVolume" x1="15%" y1="5%" x2="90%" y2="100%">
+      <stop offset="0%" style="stop-color:color-mix(in srgb, var(--clay) 45%, #fff6e8)"/>
+      <stop offset="55%" style="stop-color:var(--clay)"/>
+      <stop offset="100%" style="stop-color:color-mix(in srgb, var(--clay) 65%, #1a0f08)"/>
+    </linearGradient>
+    <linearGradient id="accentVolume" x1="15%" y1="5%" x2="90%" y2="100%">
+      <stop offset="0%" style="stop-color:color-mix(in srgb, var(--accent) 45%, #fff)"/>
+      <stop offset="55%" style="stop-color:var(--accent)"/>
+      <stop offset="100%" style="stop-color:color-mix(in srgb, var(--accent) 65%, #10131c)"/>
+    </linearGradient>
   </defs>
 </svg>
 
@@ -184,34 +197,75 @@
     <div class="parallax" data-depth="22"><div class="blob b3"></div></div>
   </div>
   <div class="mugs">
-    <div class="parallax" data-depth="28"><div class="mug m1"><svg viewBox="0 0 100 110">
-      <path fill="currentColor" filter="url(#clayGrain)">
-        <animate attributeName="d" dur="13s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
-          values="M20,14 C34,6 66,6 80,16 C92,24 90,44 86,54 C94,66 90,86 74,96 C60,106 40,106 26,96 C10,86 6,66 14,54 C10,44 8,24 20,14 Z;
-                  M24,10 C40,4 64,8 78,20 C88,30 84,46 90,56 C96,70 86,88 70,98 C56,108 42,104 28,94 C12,84 8,64 16,52 C6,42 12,20 24,10 Z;
-                  M18,18 C32,4 68,4 82,14 C94,22 86,42 92,54 C98,68 88,90 72,100 C58,110 38,108 24,98 C8,88 4,66 12,54 C4,42 6,26 18,18 Z;
-                  M20,14 C34,6 66,6 80,16 C92,24 90,44 86,54 C94,66 90,86 74,96 C60,106 40,106 26,96 C10,86 6,66 14,54 C10,44 8,24 20,14 Z"/>
+    <!-- each cup cycles through: lump on the wheel -> opening -> tall cylinder -> finished mug -> repeat.
+         the three are offset in the cycle and run at different speeds, like a studio with several
+         pieces in progress at once rather than one shape idly wobbling. -->
+    <div class="parallax" data-depth="28"><div class="mug m1"><svg viewBox="0 0 100 120">
+      <path fill="var(--ink)" opacity=".16" filter="url(#softBlur)" transform="translate(5,9)">
+        <animate attributeName="d" dur="20s" repeatCount="indefinite" calcMode="spline"
+          keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+          values="M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z;
+                  M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z;
+                  M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z;
+                  M26,18 C34,10 66,10 74,18 C82,26 80,46 84,58 C88,74 82,94 68,102 C58,108 42,108 32,102 C18,94 12,74 16,58 C20,46 18,26 26,18 Z;
+                  M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z"/>
       </path>
-      <path class="cup-handle" d="M84,42 C106,44 106,70 84,74"/>
+      <path fill="url(#clayVolume)" filter="url(#clayGrain)">
+        <animate attributeName="d" dur="20s" repeatCount="indefinite" calcMode="spline"
+          keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+          values="M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z;
+                  M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z;
+                  M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z;
+                  M26,18 C34,10 66,10 74,18 C82,26 80,46 84,58 C88,74 82,94 68,102 C58,108 42,108 32,102 C18,94 12,74 16,58 C20,46 18,26 26,18 Z;
+                  M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z"/>
+      </path>
+      <ellipse class="cup-highlight" cx="40" cy="34" rx="16" ry="11" fill="#fff8ec" opacity=".3" filter="url(#softBlur)"/>
+      <path class="cup-handle" d="M84,50 C106,52 106,78 84,82" opacity=".65"/>
     </svg></div></div>
-    <div class="parallax" data-depth="20"><div class="mug m2"><svg viewBox="0 0 100 110">
-      <path fill="currentColor" filter="url(#clayGrain)">
-        <animate attributeName="d" dur="17s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
-          values="M18,18 C32,4 68,4 82,14 C94,22 86,42 92,54 C98,68 88,90 72,100 C58,110 38,108 24,98 C8,88 4,66 12,54 C4,42 6,26 18,18 Z;
-                  M20,14 C34,6 66,6 80,16 C92,24 90,44 86,54 C94,66 90,86 74,96 C60,106 40,106 26,96 C10,86 6,66 14,54 C10,44 8,24 20,14 Z;
-                  M24,10 C40,4 64,8 78,20 C88,30 84,46 90,56 C96,70 86,88 70,98 C56,108 42,104 28,94 C12,84 8,64 16,52 C6,42 12,20 24,10 Z;
-                  M18,18 C32,4 68,4 82,14 C94,22 86,42 92,54 C98,68 88,90 72,100 C58,110 38,108 24,98 C8,88 4,66 12,54 C4,42 6,26 18,18 Z"/>
+
+    <div class="parallax" data-depth="20"><div class="mug m2"><svg viewBox="0 0 100 120">
+      <path fill="var(--ink)" opacity=".14" filter="url(#softBlur)" transform="translate(4,8)">
+        <animate attributeName="d" dur="16s" repeatCount="indefinite" calcMode="spline"
+          keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+          values="M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z;
+                  M26,18 C34,10 66,10 74,18 C82,26 80,46 84,58 C88,74 82,94 68,102 C58,108 42,108 32,102 C18,94 12,74 16,58 C20,46 18,26 26,18 Z;
+                  M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z;
+                  M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z;
+                  M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z"/>
       </path>
-      <path class="cup-handle" d="M86,40 C104,42 104,66 86,70"/>
+      <path fill="url(#clayVolume)" filter="url(#clayGrain)">
+        <animate attributeName="d" dur="16s" repeatCount="indefinite" calcMode="spline"
+          keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+          values="M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z;
+                  M26,18 C34,10 66,10 74,18 C82,26 80,46 84,58 C88,74 82,94 68,102 C58,108 42,108 32,102 C18,94 12,74 16,58 C20,46 18,26 26,18 Z;
+                  M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z;
+                  M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z;
+                  M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z"/>
+      </path>
+      <ellipse class="cup-highlight" cx="38" cy="30" rx="12" ry="8" fill="#fff8ec" opacity=".28" filter="url(#softBlur)"/>
+      <path class="cup-handle" d="M74,40 C92,42 92,64 74,68" opacity=".6"/>
     </svg></div></div>
-    <div class="parallax" data-depth="34"><div class="mug m3"><svg viewBox="0 0 100 110">
-      <path fill="currentColor" filter="url(#clayGrain)">
-        <animate attributeName="d" dur="11s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
-          values="M24,10 C40,4 64,8 78,20 C88,30 84,46 90,56 C96,70 86,88 70,98 C56,108 42,104 28,94 C12,84 8,64 16,52 C6,42 12,20 24,10 Z;
-                  M18,18 C32,4 68,4 82,14 C94,22 86,42 92,54 C98,68 88,90 72,100 C58,110 38,108 24,98 C8,88 4,66 12,54 C4,42 6,26 18,18 Z;
-                  M20,14 C34,6 66,6 80,16 C92,24 90,44 86,54 C94,66 90,86 74,96 C60,106 40,106 26,96 C10,86 6,66 14,54 C10,44 8,24 20,14 Z;
-                  M24,10 C40,4 64,8 78,20 C88,30 84,46 90,56 C96,70 86,88 70,98 C56,108 42,104 28,94 C12,84 8,64 16,52 C6,42 12,20 24,10 Z"/>
+
+    <div class="parallax" data-depth="34"><div class="mug m3"><svg viewBox="0 0 100 120">
+      <path fill="var(--ink)" opacity=".14" filter="url(#softBlur)" transform="translate(4,7)">
+        <animate attributeName="d" dur="13s" repeatCount="indefinite" calcMode="spline"
+          keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+          values="M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z;
+                  M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z;
+                  M26,18 C34,10 66,10 74,18 C82,26 80,46 84,58 C88,74 82,94 68,102 C58,108 42,108 32,102 C18,94 12,74 16,58 C20,46 18,26 26,18 Z;
+                  M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z;
+                  M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z"/>
       </path>
+      <path fill="url(#accentVolume)" filter="url(#clayGrain)">
+        <animate attributeName="d" dur="13s" repeatCount="indefinite" calcMode="spline"
+          keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"
+          values="M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z;
+                  M32,12 C50,8 50,8 68,12 C72,28 72,44 72,60 C72,80 70,96 66,108 C58,112 42,112 34,108 C30,96 28,80 28,60 C28,44 28,28 32,12 Z;
+                  M26,18 C34,10 66,10 74,18 C82,26 80,46 84,58 C88,74 82,94 68,102 C58,108 42,108 32,102 C18,94 12,74 16,58 C20,46 18,26 26,18 Z;
+                  M50,40 C64,40 76,44 76,52 C82,64 80,76 78,86 C74,96 62,102 50,102 C38,102 26,96 22,86 C20,76 18,64 24,52 C26,44 36,40 50,40 Z;
+                  M18,26 C40,18 60,18 82,26 C88,36 84,48 78,58 C74,74 68,90 62,100 C58,106 42,106 38,100 C32,90 26,74 22,58 C16,48 12,36 18,26 Z"/>
+      </path>
+      <ellipse class="cup-highlight" cx="35" cy="30" rx="10" ry="7" fill="#fff8ec" opacity=".3" filter="url(#softBlur)"/>
     </svg></div></div>
   </div>
   <div class="hero-inner">
@@ -434,7 +488,7 @@ resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 function burstConfetti() {
   if (reduceMotion) return;
-  const colors = ["#a8674a", "#7eaaff", "#e2d4bf", "#241f18"];
+  const colors = ["#b8886a", "#7a4f3f", "#e3d3c1", "#34261d"];
   const N = 90;
   const particles = Array.from({ length: N }, () => ({
     x: canvas.width / 2, y: canvas.height / 2,
