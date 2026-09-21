@@ -129,7 +129,7 @@
   }
   .a-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -24px rgba(60,40,20,.3); border-color: var(--accent); }
   .a-card .a-bg-icon { position: absolute; right: -18px; bottom: -18px; width: 110px; height: 110px; color: var(--clay); opacity: .09; pointer-events: none; transition: transform .3s ease, opacity .3s ease; }
-  .a-card .a-bg-icon svg { width: 100%; height: 100%; }
+  .a-card .a-bg-icon svg { width: 100%; height: 100%; stroke-width: .46; }
   .a-card:hover .a-bg-icon { opacity: .16; transform: scale(1.08) rotate(-4deg); }
   .a-card .a-top { position: relative; display: flex; align-items: center; gap: 12px; }
   .a-card .a-icon { width: 28px; height: 28px; color: var(--clay); flex: none; display: inline-flex; }
@@ -154,7 +154,7 @@
     text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
     transition: transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease, border-color .2s ease;
   }
-  .btn-icon { width: 18px; height: 18px; flex: none; }
+  .btn-icon { width: 18px; height: 18px; flex: none; stroke-width: 2.8; }
   .btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 14px 30px -16px rgba(60,40,20,.35); border-color: var(--accent); }
   .btn:active { transform: translateY(0) scale(.98); }
   .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -404,7 +404,7 @@ document.getElementById("agenda").innerHTML = CONFIG.agenda.map((item, i) => `
 ).join("");
 document.querySelectorAll(".a-card").forEach(card => card.addEventListener("click", () => card.classList.toggle("open")));
 
-document.getElementById("rsvp-text").textContent = `Reply in ${CONFIG.slackChannel} on Slack by ${CONFIG.rsvpDeadline}.`;
+document.getElementById("rsvp-text").textContent = `Reply on Slack by ${CONFIG.rsvpDeadline}.`;
 const rsvpBtn = document.getElementById("rsvp-btn");
 if (CONFIG.slackUrl) { rsvpBtn.href = CONFIG.slackUrl; } else { rsvpBtn.style.display = "none"; }
 
