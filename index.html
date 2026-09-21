@@ -10,16 +10,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,600;0,700;0,900;1,600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #e9e3d5;
-    --panel: #f6f1e6;
-    --panel-alt: #ddd3bd;
-    --ink: #241d14;
-    --muted: #756b58;
-    --clay: #8a4a2e;      /* fired terracotta — the hero vessel, icons, details */
-    --accent: #7eaaff;    /* Inverse Studio's actual blue — used boldly, not just as a hint */
-    --accent-ink: #10131c;
-    --line: #d6cbae;
-    --handtone: #cbb89e; /* neutral putty tone for the hand silhouettes — not a specific skin color */
+    /* matches Inverse Studio's real site, sampled directly from inversestudio.io */
+    --bg: #eef2fa;         /* their body background — near-white, faint lavender */
+    --panel: #ffffff;      /* pure white for cards, sitting on the faint-lavender bg */
+    --panel-alt: #e3e8f5;  /* light neutral for alternating sections */
+    --ink: #0b0d14;        /* their body text color — near-black */
+    --muted: #5b6072;      /* neutral gray-blue for secondary text */
+    --clay: #8a4a2e;       /* kept only for the pottery-specific icon/note accents */
+    --accent: #7eaaff;     /* their real accent color (the "Book a call" button) */
+    --accent-ink: #0b0d14; /* their button also uses near-black text on the accent, not white */
+    --line: #dbe1f0;
+    --handtone: #cbb89e;
   }
   /* dark-mode variant intentionally removed — page always renders this one light design,
      regardless of viewer system settings, so every colleague sees the same thing. */
@@ -107,6 +108,11 @@
     background: radial-gradient(circle, var(--clay) 0%, transparent 70%); opacity: .1; border-radius: 50%; pointer-events: none;
   }
   .panel-inner { position: relative; max-width: 720px; margin: 0 auto; }
+  .panel-photo-bg {
+    position: absolute; inset: 0; background-size: cover; background-position: center;
+    opacity: .16; -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  }
   .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
   .reveal.in-view { opacity: 1; transform: translateY(0); }
 
@@ -264,7 +270,8 @@
 </header>
 
 <main>
-  <section class="panel reveal">
+  <section class="panel reveal panel-photo">
+    <div class="panel-photo-bg" style="background-image:url('https://images.unsplash.com/photo-1595351298020-038700609878?q=80&amp;w=1600&amp;auto=format&amp;fit=crop')"></div>
     <div class="panel-inner">
       <h2 class="section-title">What's happening</h2>
       <p class="desc" id="desc"></p>
