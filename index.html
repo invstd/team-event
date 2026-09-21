@@ -58,9 +58,12 @@
   .mug .cup-handle { fill: none; stroke: var(--clay); stroke-width: 3.5; }
   .hands { position: absolute; right: 6%; bottom: 4%; width: clamp(220px, 26vw, 320px); height: clamp(220px, 26vw, 320px); }
   @media (max-height: 700px) { .hands { width: clamp(170px, 20vw, 240px); height: clamp(170px, 20vw, 240px); } }
-  .sketchfab-embed-wrapper { width: 100%; height: 100%; }
-  .hero-3d { width: 100%; height: 100%; display: block; border: none; }
-  .photo-credit { position: absolute; bottom: -18px; right: 4px; font-size: 10px; color: var(--muted); }
+  .sketchfab-embed-wrapper {
+    position: relative; width: 100%; height: 100%;
+    -webkit-mask-image: radial-gradient(circle at center, black 62%, transparent 100%);
+    mask-image: radial-gradient(circle at center, black 62%, transparent 100%);
+  }
+  .hero-3d { width: 100%; height: 100%; display: block; border: none; pointer-events: none; filter: grayscale(1) sepia(1) hue-rotate(190deg) saturate(2.8) brightness(1.05); }
 
   .hero-inner { position: relative; z-index: 1; text-align: center; max-width: 760px; }
   .eyebrow { text-transform: uppercase; letter-spacing: .18em; font-size: 13px; font-weight: 700; color: var(--accent); margin: 0 0 18px; }
@@ -205,16 +208,31 @@
   </div>
   <div class="hands">
     <div class="parallax" data-depth="14">
-      <!-- real, licensed 3D object: a 1960s ceramic bowl, digitised by the Virtual Museums of
-           Małopolska (Poland), CC BY 4.0 — official Sketchfab embed, draggable/spinnable. -->
+      <!-- real, scanned 3D object: a hand-built tea bowl / mug by Jani Ylinen (photogrammetry),
+           via Sketchfab's official embed API (draggable/spinnable), tinted toward brand blue. -->
       <div class="sketchfab-embed-wrapper">
-        <iframe title="Bowl" class="hero-3d" frameborder="0"
-          allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen
-          src="https://sketchfab.com/models/a16907d3c0e74ceba40ed2ca95b6c9bf/embed?autostart=1&autospin=0.3&transparent=1&ui_theme=dark&ui_infos=0&ui_controls=0&ui_hint=0&ui_help=0&ui_settings=0&ui_vr=0&ui_fullscreen=0&ui_annotations=0">
-        </iframe>
+        <iframe id="sketchfab-frame" title="Ox blood glazed mug" class="hero-3d" frameborder="0"
+          allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
       </div>
-      <span class="photo-credit">"Bowl" by Virtual Museums of Małopolska — CC BY 4.0 (Sketchfab)</span>
     </div>
+    <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
+    <script>
+    (function () {
+      var iframe = document.getElementById('sketchfab-frame');
+      if (!iframe || typeof Sketchfab === 'undefined') return;
+      var client = new Sketchfab(iframe);
+      // Note: this model's visible glaze color is baked into its texture with no adjustable
+      // tint channel (checked via getMaterialList — AlbedoPBR has a texture but no color
+      // factor), so the material API can't recolor it. Doing the recolor as a CSS filter
+      // on the iframe instead (hue-rotate + saturate), which works on whatever renders.
+      client.init('751430b5517745fcaa098fe4054e8d40', {
+        autostart: 1, autospin: 0.3, transparent: 1, ui_watermark: 0,
+        ui_infos: 0, ui_controls: 0, ui_hint: 0, ui_help: 0,
+        ui_settings: 0, ui_vr: 0, ui_fullscreen: 0, ui_annotations: 0,
+        success: function (api) { api.start(); }
+      });
+    })();
+    </script>
   </div>
   <div class="hero-inner">
     <p class="eyebrow" id="eyebrow">Team event</p>
