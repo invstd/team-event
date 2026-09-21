@@ -154,6 +154,7 @@
     text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
     transition: transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease, border-color .2s ease;
   }
+  .btn-icon { width: 18px; height: 18px; flex: none; }
   .btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 14px 30px -16px rgba(60,40,20,.35); border-color: var(--accent); }
   .btn:active { transform: translateY(0) scale(.98); }
   .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -285,15 +286,15 @@
     <div class="panel-inner">
       <h2 class="section-title" style="margin-bottom:32px">Save the date</h2>
       <div class="actions">
-        <a class="btn primary" id="gcal" target="_blank" rel="noopener">📅 Add to Google Calendar</a>
+        <a class="btn primary" id="gcal" target="_blank" rel="noopener"><svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 10h17"/><path d="M8 3v4M16 3v4"/></svg> Add to Google Calendar</a>
       </div>
 
       <div class="rsvp-box">
-        <h2>🎉 Can you make it?</h2>
+        <h2 style="display:flex; align-items:center; justify-content:center; gap:8px;"><svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18"/></svg> Can you make it?</h2>
         <p id="rsvp-text"></p>
         <div class="actions" style="justify-content:center;margin-top:0;">
           <a class="btn primary" id="rsvp-btn" href="#" target="_blank" rel="noopener">Open Slack</a>
-          <button class="btn ghost" id="hype">I'm in! 🎊</button>
+          <button class="btn ghost" id="hype"><svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg> I'm in!</button>
         </div>
       </div>
     </div>
@@ -494,10 +495,12 @@ function burstConfetti() {
   tick();
 }
 document.getElementById("gcal").addEventListener("click", burstConfetti);
-document.getElementById("hype").addEventListener("click", (e) => {
+const hypeBtn = document.getElementById("hype");
+const hypeIcon = hypeBtn.querySelector(".btn-icon").outerHTML;
+hypeBtn.addEventListener("click", () => {
   burstConfetti();
-  e.target.textContent = "Woo! Don't forget Slack 👀";
-  setTimeout(() => { e.target.textContent = "I'm in! 🎊"; }, 2200);
+  hypeBtn.innerHTML = hypeIcon + " Woo! Don't forget Slack";
+  setTimeout(() => { hypeBtn.innerHTML = hypeIcon + " I'm in!"; }, 2200);
 });
 if (rsvpBtn.style.display !== "none") rsvpBtn.addEventListener("click", burstConfetti);
 
