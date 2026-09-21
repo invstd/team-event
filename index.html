@@ -30,8 +30,9 @@
     margin: 0; background: var(--bg); color: var(--ink);
     font: 400 16px/1.6 "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='30' height='30' fill='none' stroke='%235a8fd6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9h13v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V9z'/%3E%3Cpath d='M17 11h1.5a2.5 2.5 0 0 1 0 5H17'/%3E%3Cpath d='M8 4c-.5.8-.5 1.2 0 2M12 4c-.5.8-.5 1.2 0 2'/%3E%3C/svg%3E") 15 15, auto;
   }
-  a { color: var(--accent); }
+  a { color: var(--accent); cursor: inherit; }
   ::selection { background: var(--accent); color: var(--accent-ink); }
 
   #glow {
@@ -76,11 +77,10 @@
   .hero-title {
     font-family: "Fraunces", "Outfit", serif;
     font-size: clamp(48px, 11vw, 108px); font-weight: 700; line-height: 1.08; margin: 0 0 18px; letter-spacing: -0.01em; padding-bottom: .08em;
-    background: linear-gradient(120deg, #a8c8ff 12%, #ffc49a 88%);
+    background: linear-gradient(120deg, #a8c8ff 8%, #ffb47e 60%);
     background-size: 220% auto;
     -webkit-background-clip: text; background-clip: text; color: transparent;
     animation: heroShine 16s linear infinite;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='30' height='30' fill='none' stroke='%235a8fd6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9h13v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V9z'/%3E%3Cpath d='M17 11h1.5a2.5 2.5 0 0 1 0 5H17'/%3E%3Cpath d='M8 4c-.5.8-.5 1.2 0 2M12 4c-.5.8-.5 1.2 0 2'/%3E%3C/svg%3E") 15 15, pointer;
   }
   @keyframes heroShine { to { background-position: 220% center; } }
   @media (prefers-reduced-motion: reduce) { .hero-title { animation: none; } }
@@ -124,7 +124,7 @@
   .a-card {
     position: relative; overflow: hidden;
     background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 22px;
-    cursor: pointer; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
     -webkit-tap-highlight-color: transparent;
   }
   .a-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -24px rgba(60,40,20,.3); border-color: var(--accent); }
@@ -150,7 +150,7 @@
   .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
   .btn {
     appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--ink);
-    padding: 14px 22px; border-radius: 999px; font: inherit; font-weight: 700; font-size: 15px; cursor: pointer;
+    padding: 14px 22px; border-radius: 999px; font: inherit; font-weight: 700; font-size: 15px; cursor: inherit;
     text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
     transition: transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease, border-color .2s ease;
   }
@@ -335,7 +335,7 @@ const CONFIG = {
     { icon: "pottery", time: "12:00 – 14:30",    title: "Pottery workshop",    place: "Palavara Pottery Studio", map: "Palavara Pottery Studio, Pankow, Berlin",
       note: "You'll shape your own coffee mug to take home once fired. Wear clothes that can get messy (or bring a change), and leave jewelry/rings somewhere safe." },
     { icon: "laptop",  time: "14:30 – 17:30",    title: "Break / activities",  place: "Office",                  map: "" },
-    { icon: "dinner",  time: "17:30 – open end", title: "Dinner",              place: "Candyman Izakaya",        map: "52.5264072,13.3944188" },
+    { icon: "dinner",  time: "17:30 – open end", title: "Dinner",              place: "Candyman Izakaya",        map: "Candyman Izakaya", mapUrl: "https://maps.app.goo.gl/4rvBn5LDWCdQ13R98" },
   ],
 
   // RSVP happens in Slack. Fill in slackUrl to show an "Open Slack" button.
@@ -396,7 +396,7 @@ document.getElementById("agenda").innerHTML = CONFIG.agenda.map((item, i) => `
     </div>
     <div class="a-detail">
       <span class="place">${item.place}</span>
-      ${item.map ? `<a class="maplink" href="${mapsHref(item.map)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Open in Maps ↗</a>` : ""}
+      ${item.map ? `<a class="maplink" href="${item.mapUrl || mapsHref(item.map)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Open in Maps ↗</a>` : ""}
       ${item.note ? `<span class="a-note">${item.note}</span>` : ""}
     </div>
     <div class="hint">tap for details</div>
@@ -457,7 +457,8 @@ function resizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 function burstConfetti() {
-  if (reduceMotion) return;
+  // (confetti is a one-off, click-triggered effect, not ambient motion, so it isn't gated
+  // behind prefers-reduced-motion — a deliberate click should still get a response)
   const colors = ["#b8886a", "#7eaaff", "#e3a857", "#c97b6a", "#e3d3c1", "#7c9a5e"];
   const N = 260;
   const particles = Array.from({ length: N }, () => ({
