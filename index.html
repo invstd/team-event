@@ -75,12 +75,12 @@
      kept local to the headline — the rest of the page stays on the Inverse Studio palette. */
   .hero-title {
     font-family: "Fraunces", "Outfit", serif;
-    font-size: clamp(48px, 11vw, 108px); font-weight: 700; line-height: .92; margin: 0 0 18px; letter-spacing: -0.01em;
-    background: linear-gradient(120deg, var(--ink) 25%, #5b5bf0 58%, #ff8a65 92%);
+    font-size: clamp(48px, 11vw, 108px); font-weight: 700; line-height: 1.08; margin: 0 0 18px; letter-spacing: -0.01em; padding-bottom: .08em;
+    background: linear-gradient(120deg, #a8c8ff 12%, #ffc49a 88%);
     background-size: 220% auto;
     -webkit-background-clip: text; background-clip: text; color: transparent;
     animation: heroShine 16s linear infinite;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='30' height='30' fill='none' stroke='%235b5bf0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9h13v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V9z'/%3E%3Cpath d='M17 11h1.5a2.5 2.5 0 0 1 0 5H17'/%3E%3Cpath d='M8 4c-.5.8-.5 1.2 0 2M12 4c-.5.8-.5 1.2 0 2'/%3E%3C/svg%3E") 15 15, pointer;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='30' height='30' fill='none' stroke='%235a8fd6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9h13v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V9z'/%3E%3Cpath d='M17 11h1.5a2.5 2.5 0 0 1 0 5H17'/%3E%3Cpath d='M8 4c-.5.8-.5 1.2 0 2M12 4c-.5.8-.5 1.2 0 2'/%3E%3C/svg%3E") 15 15, pointer;
   }
   @keyframes heroShine { to { background-position: 220% center; } }
   @media (prefers-reduced-motion: reduce) { .hero-title { animation: none; } }
@@ -264,8 +264,7 @@
 </header>
 
 <main>
-  <section class="panel reveal panel-photo">
-    <div class="panel-photo-bg" style="background-image:url('https://images.unsplash.com/photo-1595351298020-038700609878?q=80&amp;w=1600&amp;auto=format&amp;fit=crop')"></div>
+  <section class="panel reveal">
     <div class="panel-inner">
       <h2 class="section-title">What's happening</h2>
       <p class="desc" id="desc"></p>
@@ -336,7 +335,7 @@ const CONFIG = {
     { icon: "pottery", time: "12:00 – 14:30",    title: "Pottery workshop",    place: "Palavara Pottery Studio", map: "Palavara Pottery Studio, Pankow, Berlin",
       note: "You'll shape your own coffee mug to take home once fired. Wear clothes that can get messy (or bring a change), and leave jewelry/rings somewhere safe." },
     { icon: "laptop",  time: "14:30 – 17:30",    title: "Break / activities",  place: "Office",                  map: "" },
-    { icon: "dinner",  time: "17:30 – open end", title: "Dinner",              place: "Candyman",                map: "Candyman, Pankow, Berlin" },
+    { icon: "dinner",  time: "17:30 – open end", title: "Dinner",              place: "Candyman Izakaya",        map: "52.5264072,13.3944188" },
   ],
 
   // RSVP happens in Slack. Fill in slackUrl to show an "Open Slack" button.
@@ -460,13 +459,13 @@ window.addEventListener("resize", resizeCanvas);
 function burstConfetti() {
   if (reduceMotion) return;
   const colors = ["#b8886a", "#7eaaff", "#e3a857", "#c97b6a", "#e3d3c1", "#7c9a5e"];
-  const N = 160;
+  const N = 260;
   const particles = Array.from({ length: N }, () => ({
     x: Math.random() * canvas.width,
-    y: -30 - Math.random() * canvas.height * 0.6,
-    vx: (Math.random() - 0.5) * 1.6,
-    vy: 2.5 + Math.random() * 3,
-    size: 6 + Math.random() * 7,
+    y: -30 - Math.random() * canvas.height * 1.1,
+    vx: (Math.random() - 0.5) * 1.8,
+    vy: 2.2 + Math.random() * 3.2,
+    size: 6 + Math.random() * 8,
     color: colors[Math.floor(Math.random() * colors.length)],
     rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.25,
     sway: Math.random() * Math.PI * 2, life: 1,
@@ -490,7 +489,7 @@ function burstConfetti() {
       ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.55);
       ctx.restore();
     });
-    if (anyAlive && frame < 400) requestAnimationFrame(tick); else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (anyAlive && frame < 600) requestAnimationFrame(tick); else ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
   tick();
 }
