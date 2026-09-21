@@ -73,16 +73,20 @@
   .hero-title {
     font-family: "Fraunces", "Outfit", serif;
     font-size: clamp(48px, 11vw, 108px); font-weight: 700; line-height: .92; margin: 0 0 18px; letter-spacing: -0.01em;
-    color: var(--accent); cursor: default; transition: color .4s ease;
+    color: var(--accent); cursor: default;
   }
-  /* on hover, cycle through Inverse Studio's actual two core tones — their periwinkle accent
-     and the near-black from their real dark hero section, not invented colors */
-  .hero-title:hover { animation: inversePalette 2.2s ease-in-out infinite; }
-  @keyframes inversePalette {
-    0%, 100% { color: #7eaaff; }
-    50% { color: #0b0d14; }
+  /* a blob of Inverse Studio's near-black pushes through the periwinkle text, following the
+     cursor. each letter shows its own slice of one continuous gradient sized to the whole
+     title (--title-w) and offset by its own position (--lx), so the blob reads as one
+     coherent shape moving across the word, not restarting per letter. */
+  .hero-title .letter {
+    display: inline-block; transform: rotate(var(--r, 0deg));
+    animation: clayWobble ease-in-out infinite; animation-duration: var(--dur, 4s); animation-delay: var(--delay, 0s);
+    background-image: radial-gradient(120px circle at var(--mx, 50%) var(--my, 50%), #0b0d14, #7eaaff 68%);
+    background-size: var(--title-w, 800px) var(--title-h, 120px);
+    background-position: calc(-1 * var(--lx, 0px)) calc(-1 * var(--ly, 0px));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .hero-title .letter { display: inline-block; transform: rotate(var(--r, 0deg)); animation: clayWobble ease-in-out infinite; animation-duration: var(--dur, 4s); animation-delay: var(--delay, 0s); }
   @keyframes clayWobble { 0%, 100% { transform: rotate(var(--r, 0deg)); } 50% { transform: rotate(calc(var(--r, 0deg) * -0.55)); } }
   @media (prefers-reduced-motion: reduce) { .hero-title .letter { animation: none; transform: none; } }
   .tagline { font-size: clamp(16px, 2.4vw, 21px); color: var(--muted); margin: 0 0 40px; font-weight: 500; }
@@ -374,6 +378,35 @@ titleEl.innerHTML = CONFIG.title.split("").map((ch, i) => {
   const delay = ((i % 5) * 0.25).toFixed(2);
   return `<span class="letter" style="--r:${r}deg; --dur:${dur}s; --delay:${delay}s">${ch}</span>`;
 }).join("");
+
+/* the color "blob" that follows the cursor through the title: each letter needs to know
+   its own offset within the title so they all sample the same continuous gradient */
+function layoutTitleBlob() {
+  const w = titleEl.offsetWidth, h = titleEl.offsetHeight;
+  titleEl.style.setProperty("--title-w", w + "px");
+  titleEl.style.setProperty("--title-h", h + "px");
+  titleEl.style.setProperty("--mx", (w / 2) + "px");
+  titleEl.style.setProperty("--my", (h / 2) + "px");
+  titleEl.querySelectorAll(".letter").forEach((el) => {
+    el.style.setProperty("--lx", el.offsetLeft + "px");
+    el.style.setProperty("--ly", el.offsetTop + "px");
+  });
+}
+layoutTitleBlob();
+window.addEventListener("resize", layoutTitleBlob);
+document.fonts && document.fonts.ready && document.fonts.ready.then(layoutTitleBlob);
+if (window.matchMedia("(pointer: fine)").matches) {
+  titleEl.addEventListener("mousemove", (e) => {
+    const r = titleEl.getBoundingClientRect();
+    titleEl.style.setProperty("--mx", (e.clientX - r.left) + "px");
+    titleEl.style.setProperty("--my", (e.clientY - r.top) + "px");
+  });
+  titleEl.addEventListener("mouseleave", () => {
+    titleEl.style.setProperty("--mx", (titleEl.offsetWidth / 2) + "px");
+    titleEl.style.setProperty("--my", (titleEl.offsetHeight / 2) + "px");
+  });
+}
+
 document.getElementById("tagline").textContent = CONFIG.tagline;
 document.getElementById("desc").textContent = CONFIG.description;
 document.getElementById("footer").textContent = CONFIG.footer;
