@@ -283,8 +283,7 @@
 
   <section class="panel reveal">
     <div class="panel-inner">
-      <h2 class="section-title">Save the date</h2>
-      <p class="section-sub">Get it on your calendar now — thank yourself later.</p>
+      <h2 class="section-title" style="margin-bottom:32px">Save the date</h2>
       <div class="actions">
         <a class="btn primary" id="gcal" target="_blank" rel="noopener">📅 Add to Google Calendar</a>
       </div>
@@ -311,20 +310,19 @@
 const CONFIG = {
   eyebrow:  "Inverse Studio · Team Day",
   title:    "Team Day",
-  tagline:  "Breakfast, a walk, hands in clay, and dinner — a full day together in person.",
+  tagline:  "Breakfast, a walk, hands in clay, and dinner — a day to laugh, be creative and relax",
 
   start:    "2026-10-01 10:00",
   end:      "2026-10-01 23:00", // "open end" dinner capped here for calendar purposes
 
-  rsvpDeadline: "Friday, September 25",
+  rsvpDeadline: "Tuesday, September 29",
 
   description:
-    "You're invited to a full day made to slow down and be a team again — to enjoy the " +
-    "whole team gathered in one place, which doesn't happen often since we're remote-first. " +
-    "Breakfast together, a relaxed walk (or tram) to a pottery studio, hands-on making, a " +
-    "breather back at the office with some team games (still brainstorming — got ideas?), " +
-    "and dinner that runs as long as we want. Mostly: sharing laughs and enjoying each " +
-    "other's company.",
+    "You're invited to a full day made to slow down and to enjoy the presence of each other " +
+    "— to savor the whole team gathered in one place, which doesn't happen often since we're " +
+    "remote-first. Breakfast together, a relaxed walk (or tram) to a pottery studio, hands-on " +
+    "making, a breather back at the office with some team games — to make the day complete " +
+    "we'll round off with good food, and the evening runs as long as we want.",
 
   // icon keys: coffee | walk | pottery | laptop | dinner
   // "map" is a best-guess search query (venue name only). Add a city/address for a
@@ -334,7 +332,8 @@ const CONFIG = {
     { icon: "walk",    time: "11:00 – 11:45",    title: "Walk (or tram) over", place: "Auszeit → Palavara Studio — 30 min walk or 24 min public transit", map: "Palavara Studio, Pankow, Berlin" },
     { icon: "pottery", time: "12:00 – 14:30",    title: "Pottery workshop",    place: "Palavara Pottery Studio", map: "Palavara Pottery Studio, Pankow, Berlin",
       note: "You'll shape your own coffee mug to take home once fired. Wear clothes that can get messy (or bring a change), and leave jewelry/rings somewhere safe." },
-    { icon: "laptop",  time: "14:30 – 17:30",    title: "Break / activities",  place: "Office",                  map: "" },
+    { icon: "laptop",  time: "14:30 – 17:30",    title: "Break / activities",  place: "Office",                  map: "",
+      note: "Games at the office, plus time to relax before dinner." },
     { icon: "dinner",  time: "17:30 – open end", title: "Dinner",              place: "Candyman Izakaya",        map: "Candyman Izakaya", mapUrl: "https://maps.app.goo.gl/4rvBn5LDWCdQ13R98" },
   ],
 
