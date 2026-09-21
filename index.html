@@ -56,8 +56,7 @@
   .mug { position: absolute; }
   .mug svg { width: 100%; height: 100%; display: block; overflow: visible; }
   .mug .cup-handle { fill: none; stroke: var(--clay); stroke-width: 3.5; }
-  .hands { position: absolute; right: 6%; bottom: 4%; width: clamp(220px, 26vw, 320px); height: clamp(220px, 26vw, 320px); }
-  @media (max-height: 700px) { .hands { width: clamp(170px, 20vw, 240px); height: clamp(170px, 20vw, 240px); } }
+  .hands { position: relative; margin: 4px auto 20px; width: clamp(170px, 20vw, 230px); height: clamp(170px, 20vw, 230px); }
   .sketchfab-embed-wrapper {
     position: relative; width: 100%; height: 100%; overflow: hidden;
     -webkit-mask-image: radial-gradient(circle closest-side at center, black 45%, transparent 100%);
@@ -74,7 +73,14 @@
   .hero-title {
     font-family: "Fraunces", "Outfit", serif;
     font-size: clamp(48px, 11vw, 108px); font-weight: 700; line-height: .92; margin: 0 0 18px; letter-spacing: -0.01em;
-    color: var(--accent);
+    color: var(--accent); cursor: default; transition: color .4s ease;
+  }
+  /* on hover, cycle through Inverse Studio's actual two core tones — their periwinkle accent
+     and the near-black from their real dark hero section, not invented colors */
+  .hero-title:hover { animation: inversePalette 2.2s ease-in-out infinite; }
+  @keyframes inversePalette {
+    0%, 100% { color: #7eaaff; }
+    50% { color: #0b0d14; }
   }
   .hero-title .letter { display: inline-block; transform: rotate(var(--r, 0deg)); animation: clayWobble ease-in-out infinite; animation-duration: var(--dur, 4s); animation-delay: var(--delay, 0s); }
   @keyframes clayWobble { 0%, 100% { transform: rotate(var(--r, 0deg)); } 50% { transform: rotate(calc(var(--r, 0deg) * -0.55)); } }
@@ -210,41 +216,42 @@
     <div class="parallax" data-depth="10"><div class="blob b2"></div></div>
     <div class="parallax" data-depth="22"><div class="blob b3"></div></div>
   </div>
-  <div class="hands">
-    <div class="parallax" data-depth="14">
-      <!-- real, scanned 3D object: a hand-built tea bowl / mug by Jani Ylinen (photogrammetry),
-           via Sketchfab's official embed, auto-spinning, tinted toward brand blue. The iframe is
-           enlarged and shifted left/up inside an overflow:hidden wrapper so Sketchfab's required
-           watermark badge (bottom-left, can't be removed via params on a free embed) falls outside
-           the visible crop — non-interactive (pointer-events:none), so cropping it is safe. -->
-      <div class="sketchfab-embed-wrapper">
-        <iframe id="sketchfab-frame" title="Ox blood glazed mug" class="hero-3d" frameborder="0"
-          allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
-      </div>
-    </div>
-    <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
-    <script>
-    (function () {
-      var iframe = document.getElementById('sketchfab-frame');
-      if (!iframe || typeof Sketchfab === 'undefined') return;
-      var client = new Sketchfab(iframe);
-      // Note: this model's visible glaze color is baked into its texture with no adjustable
-      // tint channel (checked via getMaterialList — AlbedoPBR has a texture but no color
-      // factor), so the material API can't recolor it. Doing the recolor as a CSS filter
-      // on the iframe instead (hue-rotate + saturate), which works on whatever renders.
-      client.init('751430b5517745fcaa098fe4054e8d40', {
-        autostart: 1, autospin: 0.3, transparent: 1, ui_watermark: 0,
-        ui_infos: 0, ui_controls: 0, ui_hint: 0, ui_help: 0,
-        ui_settings: 0, ui_vr: 0, ui_fullscreen: 0, ui_annotations: 0,
-        success: function (api) { api.start(); }
-      });
-    })();
-    </script>
-  </div>
   <div class="hero-inner">
     <p class="eyebrow" id="eyebrow">Team event</p>
     <h1 class="hero-title" id="title">Team Day</h1>
     <p class="tagline" id="tagline">A full day together, in person.</p>
+
+    <div class="hands">
+      <div class="parallax" data-depth="14">
+        <!-- real, scanned 3D object: a hand-built tea bowl / mug by Jani Ylinen (photogrammetry),
+             via Sketchfab's official embed, auto-spinning, tinted toward brand blue. The iframe is
+             enlarged and shifted left/up inside an overflow:hidden wrapper so Sketchfab's required
+             watermark badge (bottom-left, can't be removed via params on a free embed) falls outside
+             the visible crop — non-interactive (pointer-events:none), so cropping it is safe. -->
+        <div class="sketchfab-embed-wrapper">
+          <iframe id="sketchfab-frame" title="Ox blood glazed mug" class="hero-3d" frameborder="0"
+            allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
+        </div>
+      </div>
+      <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
+      <script>
+      (function () {
+        var iframe = document.getElementById('sketchfab-frame');
+        if (!iframe || typeof Sketchfab === 'undefined') return;
+        var client = new Sketchfab(iframe);
+        // Note: this model's visible glaze color is baked into its texture with no adjustable
+        // tint channel (checked via getMaterialList — AlbedoPBR has a texture but no color
+        // factor), so the material API can't recolor it. Doing the recolor as a CSS filter
+        // on the iframe instead (hue-rotate + saturate), which works on whatever renders.
+        client.init('751430b5517745fcaa098fe4054e8d40', {
+          autostart: 1, autospin: 0.3, transparent: 1, ui_watermark: 0,
+          ui_infos: 0, ui_controls: 0, ui_hint: 0, ui_help: 0,
+          ui_settings: 0, ui_vr: 0, ui_fullscreen: 0, ui_annotations: 0,
+          success: function (api) { api.start(); }
+        });
+      })();
+      </script>
+    </div>
 
     <div class="countdown" id="countdown" aria-live="polite"></div>
 
