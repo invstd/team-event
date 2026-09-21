@@ -58,11 +58,8 @@
   .mug .cup-handle { fill: none; stroke: var(--clay); stroke-width: 3.5; }
   .hands { position: absolute; right: 6%; bottom: 4%; width: clamp(220px, 26vw, 320px); height: clamp(220px, 26vw, 320px); }
   @media (max-height: 700px) { .hands { width: clamp(170px, 20vw, 240px); height: clamp(170px, 20vw, 240px); } }
-  .sketchfab-embed-wrapper {
-    width: 100%; height: 100%; border-radius: 22px; overflow: hidden;
-    box-shadow: 0 30px 60px -24px rgba(20,12,6,.45);
-  }
-  .hero-3d { width: 100%; height: 100%; display: block; }
+  .sketchfab-embed-wrapper { width: 100%; height: 100%; }
+  .hero-3d { width: 100%; height: 100%; display: block; border: none; }
   .photo-credit { position: absolute; bottom: -18px; right: 4px; font-size: 10px; color: var(--muted); }
 
   .hero-inner { position: relative; z-index: 1; text-align: center; max-width: 760px; }
@@ -213,7 +210,7 @@
       <div class="sketchfab-embed-wrapper">
         <iframe title="Bowl" class="hero-3d" frameborder="0"
           allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen
-          src="https://sketchfab.com/models/a16907d3c0e74ceba40ed2ca95b6c9bf/embed?autostart=1&ui_theme=dark&ui_infos=0&transparent=1">
+          src="https://sketchfab.com/models/a16907d3c0e74ceba40ed2ca95b6c9bf/embed?autostart=1&autospin=0.3&transparent=1&ui_theme=dark&ui_infos=0&ui_controls=0&ui_hint=0&ui_help=0&ui_settings=0&ui_vr=0&ui_fullscreen=0&ui_annotations=0">
         </iframe>
       </div>
       <span class="photo-credit">"Bowl" by Virtual Museums of Małopolska — CC BY 4.0 (Sketchfab)</span>
