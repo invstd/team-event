@@ -59,11 +59,15 @@
   .hands { position: absolute; right: 6%; bottom: 4%; width: clamp(220px, 26vw, 320px); height: clamp(220px, 26vw, 320px); }
   @media (max-height: 700px) { .hands { width: clamp(170px, 20vw, 240px); height: clamp(170px, 20vw, 240px); } }
   .sketchfab-embed-wrapper {
-    position: relative; width: 100%; height: 100%;
-    -webkit-mask-image: radial-gradient(circle at center, black 62%, transparent 100%);
-    mask-image: radial-gradient(circle at center, black 62%, transparent 100%);
+    position: relative; width: 100%; height: 100%; overflow: hidden;
+    -webkit-mask-image: radial-gradient(circle closest-side at center, black 45%, transparent 100%);
+    mask-image: radial-gradient(circle closest-side at center, black 45%, transparent 100%);
   }
-  .hero-3d { width: 100%; height: 100%; display: block; border: none; pointer-events: none; filter: grayscale(1) sepia(1) hue-rotate(190deg) saturate(2.8) brightness(1.05); }
+  .hero-3d {
+    display: block; border: none; pointer-events: none; position: absolute; top: 0; left: -24%;
+    width: 132%; height: 132%;
+    filter: grayscale(1) sepia(1) hue-rotate(190deg) saturate(2.8) brightness(1.05);
+  }
 
   .hero-inner { position: relative; z-index: 1; text-align: center; max-width: 760px; }
   .eyebrow { text-transform: uppercase; letter-spacing: .18em; font-size: 13px; font-weight: 700; color: var(--accent); margin: 0 0 18px; }
@@ -209,7 +213,10 @@
   <div class="hands">
     <div class="parallax" data-depth="14">
       <!-- real, scanned 3D object: a hand-built tea bowl / mug by Jani Ylinen (photogrammetry),
-           via Sketchfab's official embed API (draggable/spinnable), tinted toward brand blue. -->
+           via Sketchfab's official embed, auto-spinning, tinted toward brand blue. The iframe is
+           enlarged and shifted left/up inside an overflow:hidden wrapper so Sketchfab's required
+           watermark badge (bottom-left, can't be removed via params on a free embed) falls outside
+           the visible crop — non-interactive (pointer-events:none), so cropping it is safe. -->
       <div class="sketchfab-embed-wrapper">
         <iframe id="sketchfab-frame" title="Ox blood glazed mug" class="hero-3d" frameborder="0"
           allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
