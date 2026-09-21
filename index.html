@@ -80,16 +80,16 @@
      cursor. each letter shows its own slice of one continuous gradient sized to the whole
      title (--title-w) and offset by its own position (--lx), so the blob reads as one
      coherent shape moving across the word, not restarting per letter. */
+  /* letters stay unrotated: any per-letter rotation would rotate that letter's own slice of
+     the shared background gradient, throwing it out of alignment with its neighbors and
+     breaking the continuous-blob illusion (this is what caused the visible "split"). */
   .hero-title .letter {
-    display: inline-block; transform: rotate(var(--r, 0deg));
-    animation: clayWobble ease-in-out infinite; animation-duration: var(--dur, 4s); animation-delay: var(--delay, 0s);
+    display: inline-block;
     background-image: radial-gradient(46px circle at var(--mx, 50%) var(--my, 50%), #0b0d14, #7eaaff 70%);
     background-size: var(--title-w, 800px) var(--title-h, 120px);
     background-position: calc(-1 * var(--lx, 0px)) calc(-1 * var(--ly, 0px));
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  @keyframes clayWobble { 0%, 100% { transform: rotate(var(--r, 0deg)); } 50% { transform: rotate(calc(var(--r, 0deg) * -0.55)); } }
-  @media (prefers-reduced-motion: reduce) { .hero-title .letter { animation: none; transform: none; } }
   .tagline { font-size: clamp(16px, 2.4vw, 21px); color: var(--muted); margin: 0 0 40px; font-weight: 500; }
 
   .countdown { display: flex; gap: clamp(10px,3vw,22px); justify-content: center; margin-bottom: 44px; flex-wrap: wrap; }
@@ -377,13 +377,9 @@ const end = toDate(CONFIG.end);
 document.getElementById("eyebrow").textContent = CONFIG.eyebrow;
 document.title = CONFIG.title;
 const titleEl = document.getElementById("title");
-const rotations = [-7, 5, -4, 7, -5, 4, -6, 6];
-titleEl.innerHTML = CONFIG.title.split("").map((ch, i) => {
+titleEl.innerHTML = CONFIG.title.split("").map((ch) => {
   if (ch === " ") return " ";
-  const r = rotations[i % rotations.length];
-  const dur = (3.2 + (i % 4) * 0.7).toFixed(1);
-  const delay = ((i % 5) * 0.25).toFixed(2);
-  return `<span class="letter" style="--r:${r}deg; --dur:${dur}s; --delay:${delay}s">${ch}</span>`;
+  return `<span class="letter">${ch}</span>`;
 }).join("");
 
 /* the color "blob" that follows the cursor through the title: each letter needs to know
