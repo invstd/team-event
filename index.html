@@ -252,7 +252,15 @@
           autostart: 1, autospin: 0.3, transparent: 1, ui_watermark: 0,
           ui_infos: 0, ui_controls: 0, ui_hint: 0, ui_help: 0,
           ui_settings: 0, ui_vr: 0, ui_fullscreen: 0, ui_annotations: 0,
-          success: function (api) { api.start(); }
+          success: function (api) {
+            api.start();
+            // the ui_hint:0 init flag doesn't reliably suppress the "click & hold to rotate"
+            // overlay, and since the viewer is non-interactive (pointer-events:none) nothing
+            // ever triggers it to dismiss on its own — hide it explicitly once ready.
+            api.addEventListener("viewerready", function () {
+              api.hide("hint", function () {});
+            });
+          }
         });
       })();
       </script>
