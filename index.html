@@ -76,9 +76,14 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
   /* Sketchfab's model-title overlay (top-left of the canvas) isn't reliably suppressed by
-     the API hide() call — timing-dependent. This opaque patch covers that corner outright,
-     independent of Sketchfab's own state/timing, so it can't come back. */
-  .mug-text-cover { position: absolute; top: -2%; left: -2%; width: 46%; height: 24%; background: var(--bg); z-index: 2; pointer-events: none; }
+     the API hide() call — timing-dependent. This patch covers that corner outright,
+     independent of Sketchfab's own state/timing, so it can't come back. Kept small and
+     soft-edged (radial fade, not a hard box) so it reads as a vignette rather than a
+     square when the mug is dragged/rotated underneath it. */
+  .mug-text-cover {
+    position: absolute; top: -3%; left: -3%; width: 24%; height: 13%; z-index: 2; pointer-events: none;
+    background: radial-gradient(ellipse at 22% 22%, var(--bg) 45%, transparent 78%);
+  }
   .hero-3d {
     display: block; border: none; position: absolute; top: 0; left: -10%;
     width: 112%; height: 112%; transform: scale(0.75); transform-origin: 46% 40%;
@@ -272,9 +277,15 @@
           success: function (api) {
             api.start();
             api.addEventListener("viewerready", function () {
-              api.hide("hint", function () {});
-              api.hide("infos", function () {});
-              api.hide("logo", function () {});
+              var hideOverlays = function () {
+                api.hide("hint", function () {});
+                api.hide("infos", function () {});
+                api.hide("logo", function () {});
+              };
+              hideOverlays();
+              // Sketchfab's own UI can re-show these on first interaction; re-hide once
+              // shortly after in case that race happens, then leave the CSS patch as backup.
+              setTimeout(hideOverlays, 1200);
               iframe.style.opacity = "1";
               var loader = document.getElementById("mug-loader");
               if (loader) { loader.style.opacity = "0"; setTimeout(function () { loader.remove(); }, 400); }
