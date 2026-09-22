@@ -82,9 +82,11 @@
   .hero-3d {
     display: block; border: none; position: absolute; top: 0; left: -10%;
     width: 112%; height: 112%; transform: scale(0.75); transform-origin: 46% 40%;
-    opacity: 0; transition: opacity .5s ease;
+    opacity: 0; transition: opacity 1.4s cubic-bezier(.4,0,.2,1);
     filter: grayscale(1) sepia(1) hue-rotate(190deg) saturate(2.8) brightness(1.05);
   }
+  .mug-credit { font-size: 11px; color: var(--muted); text-align: center; margin: 6px 0 0; min-height: 14px; opacity: 1; transition: opacity .6s ease; }
+  .mug-credit a { color: var(--muted); }
 
   .hero-inner { position: relative; z-index: 1; text-align: center; max-width: 760px; }
   .eyebrow { text-transform: uppercase; letter-spacing: .18em; font-size: 13px; font-weight: 700; color: var(--accent); margin: 0 0 18px; }
@@ -241,16 +243,22 @@
 
     <div class="hands">
       <div class="parallax" data-depth="14">
-        <!-- real, scanned 3D object: a hand-built tea bowl / mug by Jani Ylinen (photogrammetry),
-             via Sketchfab's official embed, auto-spinning, tinted toward brand blue. The iframe is
-             enlarged and shifted left/up inside an overflow:hidden wrapper so Sketchfab's required
-             watermark badge (bottom-left, can't be removed via params on a free embed) falls outside
-             the visible crop. Interactive — drag to rotate, autospin otherwise. The iframe stays
-             transparent/hidden until the model is actually ready, so Sketchfab's own "loading"
-             text and progress bar never show; a small custom spinner plays underneath instead. -->
+        <!-- real, scanned 3D pottery, via Sketchfab's official embed, auto-spinning, tinted toward
+             brand blue. Crossfades smoothly through four real scanned mugs, once per page load,
+             then settles back on the original (still auto-spinning).
+             The iframes are enlarged and shifted left/up inside an overflow:hidden wrapper so
+             Sketchfab's required watermark badge (bottom-left, can't be removed via params on a free
+             embed) falls outside the visible crop. Interactive — drag to rotate, autospin otherwise.
+             Each iframe stays transparent/hidden until its model is actually ready, so Sketchfab's own
+             "loading" text and progress bar never show; a small custom spinner plays underneath the
+             very first load only. Two iframes alternate: the next model loads invisibly in the
+             background while the current one keeps spinning on screen, then they crossfade — so
+             there's never a visible freeze or reload flash. -->
         <div class="sketchfab-embed-wrapper">
           <div class="mug-loader" id="mug-loader"></div>
-          <iframe id="sketchfab-frame" title="Ox blood glazed mug" class="hero-3d" frameborder="0"
+          <iframe id="sketchfab-frame-a" title="3D pottery mug" class="hero-3d" frameborder="0"
+            allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
+          <iframe id="sketchfab-frame-b" title="3D pottery mug" class="hero-3d" frameborder="0"
             allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
         </div>
         <div class="mug-text-cover"></div>
@@ -258,32 +266,123 @@
       <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
       <script>
       (function () {
-        var iframe = document.getElementById('sketchfab-frame');
-        if (!iframe || typeof Sketchfab === 'undefined') return;
-        var client = new Sketchfab(iframe);
-        // Note: this model's visible glaze color is baked into its texture with no adjustable
-        // tint channel (checked via getMaterialList — AlbedoPBR has a texture but no color
-        // factor), so the material API can't recolor it. Doing the recolor as a CSS filter
-        // on the iframe instead (hue-rotate + saturate), which works on whatever renders.
-        client.init('751430b5517745fcaa098fe4054e8d40', {
-          autostart: 1, autospin: 0.3, transparent: 1, ui_watermark: 0,
-          ui_infos: 0, ui_controls: 0, ui_hint: 0, ui_help: 0,
-          ui_settings: 0, ui_vr: 0, ui_fullscreen: 0, ui_annotations: 0, scrollwheel: 0,
-          success: function (api) {
-            api.start();
-            api.addEventListener("viewerready", function () {
-              api.hide("hint", function () {});
-              api.hide("infos", function () {});
-              api.hide("logo", function () {});
-              iframe.style.opacity = "1";
-              var loader = document.getElementById("mug-loader");
-              if (loader) { loader.style.opacity = "0"; setTimeout(function () { loader.remove(); }, 400); }
-            });
-          }
-        });
+        var frameA = document.getElementById('sketchfab-frame-a');
+        var frameB = document.getElementById('sketchfab-frame-b');
+        var creditEl = document.getElementById('mug-credit');
+        var loader = document.getElementById('mug-loader');
+        if (!frameA || !frameB || typeof Sketchfab === 'undefined') return;
+
+        // Real scanned pottery, cycled in sequence. All CC Attribution except the first
+        // (no open license set by its uploader — kept as-is, it was the site's original mug).
+        var MODELS = [
+          { uid: '751430b5517745fcaa098fe4054e8d40', title: 'Ox blood glazed mug', author: null, url: 'https://sketchfab.com/3d-models/751430b5517745fcaa098fe4054e8d40' },
+          { uid: '0855d4682bba4f988b1e5f6a89b0c20f', title: 'Cană', author: 'Institutul Național al Patrimoniului', url: 'https://sketchfab.com/3d-models/0855d4682bba4f988b1e5f6a89b0c20f' },
+          { uid: 'f0af16c7cf18456dbc2e8c0d88112774', title: 'Michael’s Mug', author: 'crowempires', url: 'https://sketchfab.com/3d-models/f0af16c7cf18456dbc2e8c0d88112774' },
+          { uid: '3f3eb0ed6ee641598cd234f55f0db022', title: 'Handmade Pottery Mug', author: 'satiety', url: 'https://sketchfab.com/3d-models/3f3eb0ed6ee641598cd234f55f0db022' }
+        ];
+
+        var CYCLE_MS = 8000;  // how long each mug stays fully visible before the next starts loading
+        var FADE_MS  = 1400;  // must match the .hero-3d opacity transition duration
+
+        var slots = [frameA, frameB];
+        var activeSlot = 0;
+        var current = 0;
+        var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function setCredit(model) {
+          if (!creditEl) return;
+          creditEl.innerHTML = model.author
+            ? 'Model: <a href="' + model.url + '" target="_blank" rel="noopener">' + model.title + '</a> by ' + model.author
+            : '';
+        }
+        function crossfadeCredit(model) {
+          if (!creditEl) { return; }
+          creditEl.style.opacity = '0';
+          setTimeout(function () { setCredit(model); creditEl.style.opacity = '1'; }, FADE_MS * 0.4);
+        }
+
+        function loadModel(iframeEl, model, onSuccess, onError) {
+          iframeEl.title = model.title + ' — 3D model';
+          var client = new Sketchfab(iframeEl);
+          // Note: none of these models have an adjustable color channel (checked via
+          // getMaterialList on the original — texture-baked glaze, no color factor), so the
+          // recolor is done as a CSS filter on the iframe instead (hue-rotate + saturate).
+          client.init(model.uid, {
+            autostart: 1, autospin: 0.3, transparent: 1, ui_watermark: 0,
+            ui_infos: 0, ui_controls: 0, ui_hint: 0, ui_help: 0,
+            ui_settings: 0, ui_vr: 0, ui_fullscreen: 0, ui_annotations: 0, scrollwheel: 0,
+            success: function (api) {
+              api.start();
+              api.addEventListener('viewerready', function () {
+                var hideOverlays = function () {
+                  api.hide('hint', function () {});
+                  api.hide('infos', function () {});
+                  api.hide('logo', function () {});
+                };
+                hideOverlays();
+                setTimeout(hideOverlays, 1200);
+                // Each model has its own native scale/framing (some are life-size scans, some
+                // small studio shots) — recenter to the bounding box, then narrow the field of
+                // view a bit (like a telephoto lens) so every model fills the circle about the
+                // same amount. FOV is scale-independent, unlike moving the camera by a distance
+                // computed from the model's own (wildly varying) world units, which risks ending
+                // up inside the mesh for a small/tightly-scanned model.
+                api.setEnableCameraConstraints(false, {}, function () {
+                  api.recenterCamera(function () {
+                    api.getFov(function (err, fov) {
+                      if (err || !fov) { onSuccess(); return; }
+                      api.setFov(Math.max(6, fov * 0.32), function () { onSuccess(); });
+                    });
+                  });
+                });
+              });
+            },
+            error: function () { onError(); }
+          });
+        }
+
+        function scheduleNext(nextIndex) {
+          // Runs the sequence through once — current mug → the others → back to the original —
+          // then stops (holding on the original, still auto-spinning). Not a perpetual loop:
+          // repeatedly tearing down and rebuilding a WebGL context for each model has real cost,
+          // and a colleague could easily leave this tab open for a long time.
+          if (!reduceMotion && MODELS.length > 1 && nextIndex !== 0) setTimeout(advance, CYCLE_MS);
+        }
+
+        function advance() {
+          var nextIndex = (current + 1) % MODELS.length;
+          var nextSlot = slots[1 - activeSlot];
+          var prevSlot = slots[activeSlot];
+          loadModel(nextSlot, MODELS[nextIndex], function () {
+            nextSlot.style.opacity = '1';
+            prevSlot.style.opacity = '0';
+            crossfadeCredit(MODELS[nextIndex]);
+            current = nextIndex;
+            activeSlot = 1 - activeSlot;
+            setTimeout(function () { prevSlot.src = 'about:blank'; }, FADE_MS);
+            scheduleNext(nextIndex);
+          }, function () {
+            current = nextIndex; // skip a model that refuses to load; try the next one next cycle
+            scheduleNext(nextIndex);
+          });
+        }
+
+        function showFirst() {
+          loadModel(frameA, MODELS[0], function () {
+            frameA.style.opacity = '1';
+            crossfadeCredit(MODELS[0]);
+            if (loader) { loader.style.opacity = '0'; setTimeout(function () { loader.remove(); }, 400); }
+            scheduleNext();
+          }, function () {
+            if (loader) { loader.style.opacity = '0'; setTimeout(function () { loader.remove(); }, 400); }
+          });
+        }
+
+        showFirst();
       })();
       </script>
     </div>
+    <p class="mug-credit" id="mug-credit"></p>
 
     <div class="countdown" id="countdown" aria-live="polite"></div>
 
