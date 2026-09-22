@@ -118,11 +118,6 @@
     background: radial-gradient(circle, var(--clay) 0%, transparent 70%); opacity: .1; border-radius: 50%; pointer-events: none;
   }
   .panel-inner { position: relative; max-width: 720px; margin: 0 auto; }
-  .panel-photo-bg {
-    position: absolute; inset: 0; background-size: cover; background-position: center;
-    opacity: .16; -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-  }
   .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
   .reveal.in-view { opacity: 1; transform: translateY(0); }
 
@@ -146,8 +141,6 @@
     -webkit-tap-highlight-color: transparent;
   }
   .a-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -24px rgba(60,40,20,.3); border-color: var(--accent); }
-  .a-card .a-bg-icon { position: absolute; right: -14px; bottom: -14px; font-size: 100px; line-height: 1; color: var(--clay); opacity: .09; pointer-events: none; transition: transform .3s ease, opacity .3s ease; }
-  .a-card:hover .a-bg-icon { opacity: .16; transform: scale(1.08) rotate(-4deg); }
   .a-card .a-top { position: relative; display: flex; align-items: center; gap: 12px; }
   .a-card .a-icon { font-size: 26px; line-height: 1; color: var(--clay); flex: none; display: inline-block; }
   .a-card:hover .a-icon { animation: iconspin .6s ease; }
@@ -300,8 +293,7 @@
     </div>
   </section>
 
-  <section class="panel alt reveal panel-photo">
-    <div class="panel-photo-bg" style="background-image:url('https://images.unsplash.com/photo-1595351298020-038700609878?q=80&amp;w=1600&amp;auto=format&amp;fit=crop')"></div>
+  <section class="panel alt reveal">
     <div class="panel-inner">
       <h2 class="section-title">The day</h2>
       <div class="agenda" id="agenda"></div>
@@ -401,7 +393,6 @@ document.getElementById("facts").innerHTML = facts.map(f => `<li><span class="k"
 
 document.getElementById("agenda").innerHTML = CONFIG.agenda.map((item, i) => `
   <div class="a-card" data-i="${i}">
-    <i class="ph ph-${item.icon} a-bg-icon" aria-hidden="true"></i>
     <div class="a-top">
       <i class="ph ph-${item.icon} a-icon"></i>
       <div>
