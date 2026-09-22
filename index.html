@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,600;0,700;0,900;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
 <style>
   :root {
     /* matches Inverse Studio's real site, sampled directly from inversestudio.io */
@@ -30,7 +31,7 @@
     margin: 0; background: var(--bg); color: var(--ink);
     font: 400 16px/1.6 "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     overflow-x: hidden;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='30' height='30' fill='none' stroke='%235a8fd6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9h13v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V9z'/%3E%3Cpath d='M17 11h1.5a2.5 2.5 0 0 1 0 5H17'/%3E%3Cpath d='M8 4c-.5.8-.5 1.2 0 2M12 4c-.5.8-.5 1.2 0 2'/%3E%3C/svg%3E") 15 15, auto;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='30' height='30'%3E%3Cpath fill='%235a8fd6' d='M4 9h13v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V9z'/%3E%3Cpath fill='%235a8fd6' fill-rule='evenodd' d='M17 11.5h1.5a2.5 2.5 0 1 1 0 5H17V15h1.5a1 1 0 1 0 0-2H17v-1.5z'/%3E%3C/svg%3E") 15 15, auto;
   }
   a { color: var(--accent); cursor: inherit; }
   ::selection { background: var(--accent); color: var(--accent-ink); }
@@ -58,15 +59,26 @@
   .mug { position: absolute; }
   .mug svg { width: 100%; height: 100%; display: block; overflow: visible; }
   .mug .cup-handle { fill: none; stroke: var(--clay); stroke-width: 3.5; }
-  .hands { position: relative; margin: 4px auto 20px; width: clamp(170px, 20vw, 230px); height: clamp(170px, 20vw, 230px); }
+  .hands { position: relative; margin: 4px auto 20px; width: clamp(320px, 46vw, 480px); height: clamp(320px, 46vw, 480px); }
   .sketchfab-embed-wrapper {
     position: relative; width: 100%; height: 100%; overflow: hidden;
     -webkit-mask-image: radial-gradient(circle closest-side at center, black 45%, transparent 100%);
     mask-image: radial-gradient(circle closest-side at center, black 45%, transparent 100%);
   }
+  .mug-loader {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    transition: opacity .4s ease;
+  }
+  .mug-loader::after {
+    content: ""; width: 34px; height: 34px; border-radius: 50%;
+    border: 3px solid var(--line); border-top-color: var(--accent);
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
   .hero-3d {
-    display: block; border: none; pointer-events: none; position: absolute; top: 0; left: -10%;
+    display: block; border: none; position: absolute; top: 0; left: -10%;
     width: 112%; height: 112%; transform: scale(0.75); transform-origin: 46% 40%;
+    opacity: 0; transition: opacity .5s ease;
     filter: grayscale(1) sepia(1) hue-rotate(190deg) saturate(2.8) brightness(1.05);
   }
 
@@ -119,32 +131,30 @@
   .facts .v { font-weight: 700; font-size: 16px; }
   .desc { color: var(--muted); font-size: 17px; margin: 0; }
 
-  /* agenda cards */
-  .agenda { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  /* agenda cards — masonry via CSS columns, so cards can be different heights
+     (some have a note, some don't) without leaving awkward gaps */
+  .agenda { columns: 2 260px; column-gap: 16px; }
+  @media (max-width: 560px) { .agenda { columns: 1; } }
   .a-card {
-    position: relative; overflow: hidden;
+    position: relative; overflow: hidden; break-inside: avoid; margin-bottom: 16px;
     background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 22px;
     transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
     -webkit-tap-highlight-color: transparent;
   }
   .a-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -24px rgba(60,40,20,.3); border-color: var(--accent); }
-  .a-card .a-bg-icon { position: absolute; right: -18px; bottom: -18px; width: 110px; height: 110px; color: var(--clay); opacity: .09; pointer-events: none; transition: transform .3s ease, opacity .3s ease; }
-  .a-card .a-bg-icon svg { width: 100%; height: 100%; }
+  .a-card .a-bg-icon { position: absolute; right: -14px; bottom: -14px; font-size: 100px; line-height: 1; color: var(--clay); opacity: .09; pointer-events: none; transition: transform .3s ease, opacity .3s ease; }
   .a-card:hover .a-bg-icon { opacity: .16; transform: scale(1.08) rotate(-4deg); }
   .a-card .a-top { position: relative; display: flex; align-items: center; gap: 12px; }
-  .a-card .a-icon { width: 28px; height: 28px; color: var(--clay); flex: none; display: inline-flex; }
-  .a-card .a-icon svg { width: 100%; height: 100%; }
+  .a-card .a-icon { font-size: 26px; line-height: 1; color: var(--clay); flex: none; display: inline-block; }
   .a-card:hover .a-icon { animation: iconspin .6s ease; }
   @keyframes iconspin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
   .a-card .time { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); display: block; }
   .a-card .a-title { font-weight: 700; font-size: 17px; }
-  .a-card .a-detail { position: relative; max-height: 0; overflow: hidden; transition: max-height .35s ease, margin-top .35s ease; margin-top: 0; }
-  .a-card.open .a-detail { max-height: 220px; margin-top: 12px; }
+  .a-card .a-detail { position: relative; margin-top: 12px; }
   .a-card .place { color: var(--muted); font-size: 14px; display: block; margin-bottom: 6px; }
   .a-card .maplink { font-size: 12px; font-weight: 700; color: var(--accent); text-decoration: none; }
   .a-card .maplink:hover { text-decoration: underline; }
   .a-card .a-note { display: block; margin-top: 10px; font-size: 13px; color: var(--clay); background: color-mix(in srgb, var(--clay) 14%, transparent); border-radius: 10px; padding: 8px 10px; }
-  .a-card .hint { position: relative; font-size: 12px; color: var(--muted); opacity: .65; margin-top: 10px; }
 
   /* buttons */
   .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
@@ -154,7 +164,7 @@
     text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
     transition: transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease, border-color .2s ease;
   }
-  .btn-icon { width: 18px; height: 18px; flex: none; stroke-width: 2.8; }
+  .btn-icon { font-size: 18px; line-height: 1; flex: none; }
   .btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 14px 30px -16px rgba(60,40,20,.35); border-color: var(--accent); }
   .btn:active { transform: translateY(0) scale(.98); }
   .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -217,7 +227,6 @@
 
 <header class="hero" id="hero">
   <div class="blobs">
-    <div class="parallax" data-depth="16"><div class="blob b1"></div></div>
     <div class="parallax" data-depth="10"><div class="blob b2"></div></div>
     <div class="parallax" data-depth="22"><div class="blob b3"></div></div>
   </div>
@@ -232,8 +241,11 @@
              via Sketchfab's official embed, auto-spinning, tinted toward brand blue. The iframe is
              enlarged and shifted left/up inside an overflow:hidden wrapper so Sketchfab's required
              watermark badge (bottom-left, can't be removed via params on a free embed) falls outside
-             the visible crop — non-interactive (pointer-events:none), so cropping it is safe. -->
+             the visible crop. Interactive — drag to rotate, autospin otherwise. The iframe stays
+             transparent/hidden until the model is actually ready, so Sketchfab's own "loading"
+             text and progress bar never show; a small custom spinner plays underneath instead. -->
         <div class="sketchfab-embed-wrapper">
+          <div class="mug-loader" id="mug-loader"></div>
           <iframe id="sketchfab-frame" title="Ox blood glazed mug" class="hero-3d" frameborder="0"
             allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
         </div>
@@ -251,14 +263,14 @@
         client.init('751430b5517745fcaa098fe4054e8d40', {
           autostart: 1, autospin: 0.3, transparent: 1, ui_watermark: 0,
           ui_infos: 0, ui_controls: 0, ui_hint: 0, ui_help: 0,
-          ui_settings: 0, ui_vr: 0, ui_fullscreen: 0, ui_annotations: 0,
+          ui_settings: 0, ui_vr: 0, ui_fullscreen: 0, ui_annotations: 0, scrollwheel: 0,
           success: function (api) {
             api.start();
-            // the ui_hint:0 init flag doesn't reliably suppress the "click & hold to rotate"
-            // overlay, and since the viewer is non-interactive (pointer-events:none) nothing
-            // ever triggers it to dismiss on its own — hide it explicitly once ready.
             api.addEventListener("viewerready", function () {
               api.hide("hint", function () {});
+              iframe.style.opacity = "1";
+              var loader = document.getElementById("mug-loader");
+              if (loader) { loader.style.opacity = "0"; setTimeout(function () { loader.remove(); }, 400); }
             });
           }
         });
@@ -285,24 +297,19 @@
     <div class="panel-photo-bg" style="background-image:url('https://images.unsplash.com/photo-1595351298020-038700609878?q=80&amp;w=1600&amp;auto=format&amp;fit=crop')"></div>
     <div class="panel-inner">
       <h2 class="section-title">The day</h2>
-      <p class="section-sub">Tap a stop for details.</p>
       <div class="agenda" id="agenda"></div>
     </div>
   </section>
 
   <section class="panel reveal">
     <div class="panel-inner">
-      <h2 class="section-title" style="margin-bottom:32px">Save the date</h2>
-      <div class="actions">
-        <a class="btn primary" id="gcal" target="_blank" rel="noopener"><svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 10h17"/><path d="M8 3v4M16 3v4"/></svg> Add to Google Calendar</a>
-      </div>
-
       <div class="rsvp-box">
-        <h2 style="display:flex; align-items:center; justify-content:center; gap:8px;"><svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18"/></svg> Can you make it?</h2>
+        <h2 style="display:flex; align-items:center; justify-content:center; gap:8px;"><i class="ph ph-sparkle btn-icon"></i> Can you make it?</h2>
         <p id="rsvp-text"></p>
         <div class="actions" style="justify-content:center;margin-top:0;">
           <a class="btn primary" id="rsvp-btn" href="#" target="_blank" rel="noopener">Open Slack</a>
-          <button class="btn ghost" id="hype"><svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg> I'm in!</button>
+          <button class="btn ghost" id="hype"><i class="ph ph-check-circle btn-icon"></i> I'm in!</button>
+          <a class="btn ghost" id="gcal" target="_blank" rel="noopener"><i class="ph ph-calendar-plus btn-icon"></i> Add to Google Calendar</a>
         </div>
       </div>
     </div>
@@ -317,7 +324,7 @@
    Dates use 24h local time in the format: "YYYY-MM-DD HH:MM"
    ───────────────────────────────────────────────────────────── */
 const CONFIG = {
-  eyebrow:  "Inverse Studio · Team Day",
+  eyebrow:  "You're invited",
   title:    "Team Day",
   tagline:  "Breakfast, a walk, hands in clay, and dinner — a day to laugh, be creative and relax",
 
@@ -334,16 +341,17 @@ const CONFIG = {
     "we'll round off with good food, and the evening runs as long as we want.",
 
   // icon keys: coffee | walk | pottery | laptop | dinner
+  // icon: a Phosphor Icons name (https://phosphoricons.com), rendered as <i class="ph ph-{icon}">
   // "map" is a best-guess search query (venue name only). Add a city/address for a
   // more reliable pin, e.g. "Auszeit, Vienna, Austria".
   agenda: [
-    { icon: "coffee",  time: "10:00 – 11:00",    title: "Breakfast",           place: "Auszeit",                 map: "Auszeit, Pankow, Berlin" },
-    { icon: "walk",    time: "11:00 – 11:45",    title: "Walk (or tram) over", place: "Auszeit → Palavara Studio — 30 min walk or 24 min public transit", map: "Palavara Studio, Pankow, Berlin" },
-    { icon: "pottery", time: "12:00 – 14:30",    title: "Pottery workshop",    place: "Palavara Pottery Studio", map: "Palavara Pottery Studio, Pankow, Berlin",
+    { icon: "coffee",     time: "10:00 – 11:00",    title: "Breakfast",           place: "Auszeit",                 map: "Auszeit, Pankow, Berlin" },
+    { icon: "footprints", time: "11:00 – 11:45",    title: "Walk (or tram) over", place: "Auszeit → Palavara Studio — 30 min walk or 24 min public transit", map: "Palavara Studio, Pankow, Berlin" },
+    { icon: "jar",        time: "12:00 – 14:30",    title: "Pottery workshop",    place: "Palavara Pottery Studio", map: "Palavara Pottery Studio, Pankow, Berlin",
       note: "You'll shape your own coffee mug to take home once fired. Wear clothes that can get messy (or bring a change), and leave jewelry/rings somewhere safe." },
-    { icon: "laptop",  time: "14:30 – 17:30",    title: "Break / activities",  place: "Office",                  map: "",
+    { icon: "laptop",     time: "14:30 – 17:30",    title: "Break / activities",  place: "Office",                  map: "",
       note: "Games at the office, plus time to relax before dinner." },
-    { icon: "dinner",  time: "17:30 – open end", title: "Dinner",              place: "Candyman Izakaya",        map: "Candyman Izakaya", mapUrl: "https://maps.app.goo.gl/4rvBn5LDWCdQ13R98" },
+    { icon: "fork-knife", time: "17:30 – open end", title: "Dinner",              place: "Candyman Izakaya",        map: "Candyman Izakaya", mapUrl: "https://maps.app.goo.gl/4rvBn5LDWCdQ13R98" },
   ],
 
   // RSVP happens in Slack. Fill in slackUrl to show an "Open Slack" button.
@@ -353,14 +361,6 @@ const CONFIG = {
   footer: "Questions? Email anna@inversestudio.io.",
 };
 /* ───────────────────────────────────────────────────────────── */
-
-const ICONS = {
-  coffee:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13v7a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V9z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 4c-.5.8-.5 1.2 0 2M12 4c-.5.8-.5 1.2 0 2"/></svg>`,
-  walk:    `<svg viewBox="0 0 24 24" fill="currentColor"><ellipse cx="8" cy="7" rx="2.1" ry="3.1"/><ellipse cx="16" cy="15" rx="2.1" ry="3.1" transform="rotate(18 16 15)"/></svg>`,
-  pottery: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3c-1 2-1 3 .5 4.5C8 9 6 11.5 6 15a6 6 0 0 0 12 0c0-3.5-2-6-4.5-7.5C15 6 15 5 14 3"/></svg>`,
-  laptop:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="10" rx="1.5"/><path d="M2 19h20"/></svg>`,
-  dinner:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a2 2 0 0 0 4 0V3"/><path d="M8 10v11"/><path d="M16 3c-1.5 0-2 2-2 4s.5 4 2 4 2-2 2-4-.5-4-2-4z"/><path d="M16 11v10"/></svg>`,
-};
 
 function toDate(s) {
   const [d, t] = s.split(" ");
@@ -393,10 +393,10 @@ const facts = [
 document.getElementById("facts").innerHTML = facts.map(f => `<li><span class="k">${f.k}</span><span class="v">${f.v}</span></li>`).join("");
 
 document.getElementById("agenda").innerHTML = CONFIG.agenda.map((item, i) => `
-  <div class="a-card${item.icon === "pottery" ? " pottery" : ""}" data-i="${i}">
-    <div class="a-bg-icon">${ICONS[item.icon] || ""}</div>
+  <div class="a-card" data-i="${i}">
+    <i class="ph ph-${item.icon} a-bg-icon" aria-hidden="true"></i>
     <div class="a-top">
-      <span class="a-icon">${ICONS[item.icon] || ""}</span>
+      <i class="ph ph-${item.icon} a-icon"></i>
       <div>
         <span class="time">${item.time}</span>
         <span class="a-title">${item.title}</span>
@@ -404,13 +404,11 @@ document.getElementById("agenda").innerHTML = CONFIG.agenda.map((item, i) => `
     </div>
     <div class="a-detail">
       <span class="place">${item.place}</span>
-      ${item.map ? `<a class="maplink" href="${item.mapUrl || mapsHref(item.map)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Open in Maps ↗</a>` : ""}
+      ${item.map ? `<a class="maplink" href="${item.mapUrl || mapsHref(item.map)}" target="_blank" rel="noopener">Open in Maps ↗</a>` : ""}
       ${item.note ? `<span class="a-note">${item.note}</span>` : ""}
     </div>
-    <div class="hint">tap for details</div>
   </div>`
 ).join("");
-document.querySelectorAll(".a-card").forEach(card => card.addEventListener("click", () => card.classList.toggle("open")));
 
 document.getElementById("rsvp-text").textContent = `Reply on Slack by ${CONFIG.rsvpDeadline}.`;
 const rsvpBtn = document.getElementById("rsvp-btn");
