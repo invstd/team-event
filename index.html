@@ -36,23 +36,6 @@
   a { color: var(--accent); cursor: inherit; }
   ::selection { background: var(--accent); color: var(--accent-ink); }
 
-  /* a custom cursor that actually animates — CSS cursor:url() images are always static,
-     browsers never run SVG/CSS animation inside them, so a "steaming coffee" cursor has to
-     be a real DOM element that follows the mouse instead of the native cursor property. */
-  body.custom-cursor-on, body.custom-cursor-on * { cursor: none !important; }
-  #custom-cursor {
-    position: fixed; top: 0; left: 0; width: 30px; height: 30px; z-index: 9999;
-    pointer-events: none; transform: translate(-15px, -15px); color: var(--accent);
-  }
-  #custom-cursor svg { width: 100%; height: 100%; overflow: visible; }
-  #custom-cursor .steam { transform-origin: center bottom; animation: steamRise 1.6s ease-in-out infinite; }
-  #custom-cursor .steam.s2 { animation-delay: .3s; }
-  #custom-cursor .steam.s3 { animation-delay: .6s; }
-  @keyframes steamRise {
-    0%, 100% { transform: translateY(0) scaleY(1); opacity: .55; }
-    50% { transform: translateY(-5px) scaleY(1.25); opacity: 1; }
-  }
-
   #glow {
     position: fixed; inset: 0; pointer-events: none; z-index: 2; opacity: 0;
     background: radial-gradient(280px circle at var(--gx,50%) var(--gy,50%), color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%);
@@ -92,6 +75,10 @@
     animation: spin .8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+  /* Sketchfab's model-title overlay (top-left of the canvas) isn't reliably suppressed by
+     the API hide() call — timing-dependent. This opaque patch covers that corner outright,
+     independent of Sketchfab's own state/timing, so it can't come back. */
+  .mug-text-cover { position: absolute; top: -2%; left: -2%; width: 46%; height: 24%; background: var(--bg); z-index: 2; pointer-events: none; }
   .hero-3d {
     display: block; border: none; position: absolute; top: 0; left: -10%;
     width: 112%; height: 112%; transform: scale(0.75); transform-origin: 46% 40%;
@@ -266,6 +253,7 @@
           <iframe id="sketchfab-frame" title="Ox blood glazed mug" class="hero-3d" frameborder="0"
             allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
         </div>
+        <div class="mug-text-cover"></div>
       </div>
       <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
       <script>
@@ -391,27 +379,6 @@ function z(n) { return String(n).padStart(2, "0"); }
 function icsStamp(dt) { return `${dt.getFullYear()}${z(dt.getMonth()+1)}${z(dt.getDate())}T${z(dt.getHours())}${z(dt.getMinutes())}00`; }
 function mapsHref(q) { return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q); }
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-/* animated "steaming coffee" cursor — see the CSS comment above for why this can't just be
-   the native cursor property. Falls back to the static cursor:url() icon on touch devices
-   and for reduced-motion users, since there's no mouse to follow / no ambient motion wanted. */
-if (window.matchMedia("(pointer: fine)").matches && !reduceMotion) {
-  document.body.classList.add("custom-cursor-on");
-  const cursorEl = document.createElement("div");
-  cursorEl.id = "custom-cursor";
-  cursorEl.setAttribute("aria-hidden", "true");
-  cursorEl.innerHTML = `<svg viewBox="0 0 256 256">
-    <path fill="currentColor" d="M208,80H32a8,8,0,0,0-8,8v48a96.3,96.3,0,0,0,32.54,72H32a8,8,0,0,0,0,16H208a8,8,0,0,0,0-16H183.46a96.59,96.59,0,0,0,27-40.09A40,40,0,0,0,248,128v-8A40,40,0,0,0,208,80Zm24,48a24,24,0,0,1-17.2,23,95.78,95.78,0,0,0,1.2-15V97.38A24,24,0,0,1,232,120Z"/>
-    <rect class="steam s1" fill="currentColor" x="80" y="24" width="16" height="32" rx="8"/>
-    <rect class="steam s2" fill="currentColor" x="112" y="24" width="16" height="32" rx="8"/>
-    <rect class="steam s3" fill="currentColor" x="144" y="24" width="16" height="32" rx="8"/>
-  </svg>`;
-  document.body.appendChild(cursorEl);
-  window.addEventListener("mousemove", (e) => {
-    cursorEl.style.left = e.clientX + "px";
-    cursorEl.style.top = e.clientY + "px";
-  });
-}
 
 const start = toDate(CONFIG.start);
 const end = toDate(CONFIG.end);
