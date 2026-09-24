@@ -60,7 +60,7 @@
   .mug svg { width: 100%; height: 100%; display: block; overflow: visible; }
   .mug .cup-handle { fill: none; stroke: var(--clay); stroke-width: 3.5; }
   .hands { position: relative; margin: 4px auto 20px; width: clamp(320px, 46vw, 480px); height: clamp(320px, 46vw, 480px); }
-  .sketchfab-embed-wrapper {
+  .mug-embed-wrapper {
     position: relative; width: 100%; height: 100%; overflow: hidden;
     -webkit-mask-image: radial-gradient(circle closest-side at center, black 45%, transparent 100%);
     mask-image: radial-gradient(circle closest-side at center, black 45%, transparent 100%);
@@ -75,15 +75,12 @@
     animation: spin .8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  /* Sketchfab's model-title overlay (top-left of the canvas) isn't reliably suppressed by
-     the API hide() call — timing-dependent. This opaque patch covers that corner outright,
-     independent of Sketchfab's own state/timing, so it can't come back. */
-  .mug-text-cover { position: absolute; top: -2%; left: -2%; width: 46%; height: 24%; background: var(--bg); z-index: 2; pointer-events: none; }
   .hero-3d {
-    display: block; border: none; position: absolute; top: 0; left: -10%;
-    width: 112%; height: 112%; transform: scale(0.75); transform-origin: 46% 40%;
-    opacity: 0; transition: opacity .5s ease;
+    display: block; border: none; position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0; transition: opacity .6s ease;
     filter: grayscale(1) sepia(1) hue-rotate(190deg) saturate(2.8) brightness(1.05);
+    --poster-color: transparent;
   }
 
   .hero-inner { position: relative; z-index: 1; text-align: center; max-width: 760px; }
@@ -234,46 +231,33 @@
 
     <div class="hands">
       <div class="parallax" data-depth="14">
-        <!-- real, scanned 3D object: a hand-built tea bowl / mug by Jani Ylinen (photogrammetry),
-             via Sketchfab's official embed, auto-spinning, tinted toward brand blue. The iframe is
-             enlarged and shifted left/up inside an overflow:hidden wrapper so Sketchfab's required
-             watermark badge (bottom-left, can't be removed via params on a free embed) falls outside
-             the visible crop. Interactive — drag to rotate, autospin otherwise. The iframe stays
-             transparent/hidden until the model is actually ready, so Sketchfab's own "loading"
-             text and progress bar never show; a small custom spinner plays underneath instead. -->
-        <div class="sketchfab-embed-wrapper">
+        <!-- real 3D object, downloaded (CC-friendly source) and rendered locally via Google's
+             <model-viewer> web component — no external embed, no watermark to work around.
+             Auto-spinning, tinted toward brand blue via the same CSS-filter trick used before
+             (hue-rotate + saturate on the whole element). Interactive — drag to rotate, autospin
+             otherwise; zoom is disabled so it can't hijack page scroll. Stays hidden until the
+             model actually finishes loading, so a small custom spinner plays underneath instead
+             of model-viewer's own loading UI. -->
+        <div class="mug-embed-wrapper">
           <div class="mug-loader" id="mug-loader"></div>
-          <iframe id="sketchfab-frame" title="Ox blood glazed mug" class="hero-3d" frameborder="0"
-            allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
+          <model-viewer id="mug-model" class="hero-3d" src="models/mug.glb"
+            alt="A handcrafted clay mug"
+            auto-rotate rotation-per-second="18deg" camera-controls
+            disable-zoom disable-pan interaction-prompt="none" shadow-intensity="0"></model-viewer>
         </div>
-        <div class="mug-text-cover"></div>
       </div>
-      <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
+      <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
       <script>
       (function () {
-        var iframe = document.getElementById('sketchfab-frame');
-        if (!iframe || typeof Sketchfab === 'undefined') return;
-        var client = new Sketchfab(iframe);
-        // Note: this model's visible glaze color is baked into its texture with no adjustable
-        // tint channel (checked via getMaterialList — AlbedoPBR has a texture but no color
-        // factor), so the material API can't recolor it. Doing the recolor as a CSS filter
-        // on the iframe instead (hue-rotate + saturate), which works on whatever renders.
-        client.init('751430b5517745fcaa098fe4054e8d40', {
-          autostart: 1, autospin: 0.3, transparent: 1, ui_watermark: 0,
-          ui_infos: 0, ui_controls: 0, ui_hint: 0, ui_help: 0,
-          ui_settings: 0, ui_vr: 0, ui_fullscreen: 0, ui_annotations: 0, scrollwheel: 0,
-          success: function (api) {
-            api.start();
-            api.addEventListener("viewerready", function () {
-              api.hide("hint", function () {});
-              api.hide("infos", function () {});
-              api.hide("logo", function () {});
-              iframe.style.opacity = "1";
-              var loader = document.getElementById("mug-loader");
-              if (loader) { loader.style.opacity = "0"; setTimeout(function () { loader.remove(); }, 400); }
-            });
-          }
-        });
+        var mv = document.getElementById('mug-model');
+        if (!mv) return;
+        var reveal = function () {
+          mv.style.opacity = '1';
+          var loader = document.getElementById('mug-loader');
+          if (loader) { loader.style.opacity = '0'; setTimeout(function () { loader.remove(); }, 400); }
+        };
+        mv.addEventListener('load', reveal);
+        mv.addEventListener('error', reveal);
       })();
       </script>
     </div>
