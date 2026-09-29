@@ -20,7 +20,7 @@ add it to their calendar (or RSVP). No build step, no framework, no backend.
 | RSVP method | ✅ Slack — page says "reply in `#team-day`". Add a real link in `CONFIG.slackUrl` (in `index.html`) to turn on the "Open Slack" button; until then it just shows the text. |
 | Maps | Auto-generated Google Maps search links per agenda stop, from the venue name only. Add a city/address to `CONFIG.agenda[].map` in `index.html` for a more precise pin. |
 | Photos | Removed from the page for now (nothing to show yet, placeholder tiles were confusing). `photos/` folder is still there — drop files in and I can add a gallery section back once there's something real to display. |
-| Games for the office block | _TBD_ — "vibe coding" wasn't confirmed. See brainstormed options below; pick one (or more) and I'll write it into the page. |
+| Games for the outdoor block | _TBD_ — "vibe coding" wasn't confirmed. See brainstormed options below; pick one (or more) and I'll write it into the page. |
 | Event content | ✅ Filled in — see interview notes below |
 
 ---
@@ -128,19 +128,20 @@ Date format is 24-hour local time: `"YYYY-MM-DD HH:MM"`.
 - **Purpose / vibe:** A bit of everything — fun, some vibe coding, shared laughs, design/coding-related games, mainly a chance to see each other in person.
 - **Date & time:** Thursday... actually **Friday, October 1, 2026**, 10:00 – open end.
 - **Agenda:**
-  - 10:00–11:00 Breakfast — Auszeit
-  - 11:00–11:45 Walk or public transit to Palavara Studio (30 min walk / 24 min transit)
+  - 10:00–11:00 Breakfast — Spreegold, Stargarder Str. 82, 10437 Berlin (moved from Auszeit)
+  - 11:00–11:45 S-Bahn to Palavara Studio, Steegerstr. 1a (15 min by S-Bahn)
   - 12:00–14:30 Pottery workshop — Palavara Pottery Studio
-  - 14:30–17:30 Break / activities — Office
+  - 14:30–17:30 Games outside — a nice outdoor spot picked on the way (no longer the office)
   - 17:30–open end Dinner — Candyman
 - **Who's invited:** the team (assumed — confirm if it's everyone or a subset)
 - **Host / organizer:** Anna
 - **RSVP:** placeholder is email to Anna by Fri Sept 25 — _confirm actual method/deadline_
 - **Company:** Inverse Studio (a design company — page should feel fun/playful/modern over corporate; explicitly does *not* need to match the studio's actual brand)
+- **Lunch:** spontaneous, decided after the pottery class depending on how it goes
 - **Prep note for pottery:** wear clothes that can get messy (or bring a change), leave jewelry/rings somewhere safe
-- **Still open:** exact addresses for Auszeit / Palavara / Candyman (nice-to-have, map links currently just search the venue name)
+- **Addresses:** Spreegold and Palavara map links use exact addresses; Candyman uses a Google Maps share link
 
-### Game ideas for the 14:30–17:30 office block (brainstorm — pick some)
+### Game ideas for the 14:30–17:30 outdoor block (brainstorm — pick some)
 
 - **Figma Speed Draw** — Pictionary, but you recreate a given UI or logo in Figma against the clock
 - **Design Roast** — everyone redesigns a notoriously ugly website live in 10 minutes, funniest wins

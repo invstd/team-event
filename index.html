@@ -309,7 +309,7 @@
 const CONFIG = {
   eyebrow:  "You're invited",
   title:    "Team Day",
-  tagline:  "Breakfast, a walk, hands in clay, and dinner — a day to laugh, be creative and relax",
+  tagline:  "Breakfast, a short ride, hands in clay, and dinner — a day to laugh, be creative and relax",
 
   start:    "2026-10-01 10:00",
   end:      "2026-10-01 23:00", // "open end" dinner capped here for calendar purposes
@@ -319,8 +319,8 @@ const CONFIG = {
   description:
     "You're invited to a full day made to slow down and to enjoy the presence of each other " +
     "— to savor the whole team gathered in one place, which doesn't happen often since we're " +
-    "remote-first. Breakfast together, a relaxed walk (or tram) to a pottery studio, hands-on " +
-    "making, a breather back at the office with some team games — to make the day complete " +
+    "remote-first. Breakfast together, a short S-Bahn ride to a pottery studio, hands-on " +
+    "making, a breather outside with some team games — to make the day complete " +
     "we'll round off with good food, and the evening runs as long as we want.",
 
   // icon keys: coffee | walk | pottery | laptop | dinner
@@ -328,12 +328,12 @@ const CONFIG = {
   // "map" is a best-guess search query (venue name only). Add a city/address for a
   // more reliable pin, e.g. "Auszeit, Vienna, Austria".
   agenda: [
-    { icon: "coffee",     time: "10:00 – 11:00",    title: "Breakfast",           place: "Auszeit",                 map: "Auszeit, Pankow, Berlin" },
-    { icon: "footprints", time: "11:00 – 11:45",    title: "Walk (or tram) over", place: "Auszeit → Palavara Studio — 30 min walk or 24 min public transit", map: "Palavara Studio, Pankow, Berlin" },
-    { icon: "jar",        time: "12:00 – 14:30",    title: "Pottery workshop",    place: "Palavara Pottery Studio", map: "Palavara Pottery Studio, Pankow, Berlin",
-      note: "You'll shape your own coffee mug to take home once fired. Wear clothes that can get messy (or bring a change), and leave jewelry/rings somewhere safe." },
-    { icon: "laptop",     time: "14:30 – 17:30",    title: "Break / activities",  place: "Office",                  map: "",
-      note: "Games at the office, plus time to relax before dinner." },
+    { icon: "coffee",     time: "10:00 – 11:00",    title: "Breakfast",           place: "Spreegold, Stargarder Str. 82", map: "Spreegold, Stargarder Str. 82, 10437 Berlin" },
+    { icon: "train",      time: "11:00 – 11:45",    title: "S-Bahn over",         place: "Spreegold → Palavara Studio — 15 min by S-Bahn", map: "Palavara Pottery Studio, Steegerstr. 1a, 13359 Berlin" },
+    { icon: "jar",        time: "12:00 – 14:30",    title: "Pottery workshop",    place: "Palavara Pottery Studio", map: "Palavara Pottery Studio, Steegerstr. 1a, 13359 Berlin",
+      note: "You'll shape your own coffee mug to take home once fired. Wear clothes that can get messy (or bring a change), and leave jewelry/rings somewhere safe. Lunch is spontaneous — we'll decide together after the class, depending on how it goes." },
+    { icon: "tree",       time: "14:30 – 17:30",    title: "Games outside",       place: "A nice spot outdoors — we'll pick it on our way", map: "",
+      note: "Team games in the open air, plus time to relax before dinner." },
     { icon: "fork-knife", time: "17:30 – open end", title: "Dinner",              place: "Candyman Izakaya",        map: "Candyman Izakaya", mapUrl: "https://maps.app.goo.gl/4rvBn5LDWCdQ13R98" },
   ],
 
