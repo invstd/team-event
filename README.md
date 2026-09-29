@@ -126,9 +126,9 @@ Date format is 24-hour local time: `"YYYY-MM-DD HH:MM"`.
 
 - **What is the event?** "Team Day" — a full in-person day for a remote-first team.
 - **Purpose / vibe:** A bit of everything — fun, some vibe coding, shared laughs, design/coding-related games, mainly a chance to see each other in person.
-- **Date & time:** Thursday... actually **Friday, October 1, 2026**, 10:00 – open end.
+- **Date & time:** Thursday... actually **Friday, October 1, 2026**, 09:30 – open end.
 - **Agenda:**
-  - 10:00–11:00 Breakfast — Spreegold, Stargarder Str. 82, 10437 Berlin (moved from Auszeit)
+  - 09:30–11:00 Breakfast — Spreegold, Stargarder Str. 82, 10437 Berlin (moved from Auszeit)
   - 11:00–11:45 S-Bahn to Palavara Studio, Steegerstr. 1a (15 min by S-Bahn)
   - 12:00–14:30 Pottery workshop — Palavara Pottery Studio
   - 14:30–17:30 Games outside — a nice outdoor spot picked on the way (no longer the office)
